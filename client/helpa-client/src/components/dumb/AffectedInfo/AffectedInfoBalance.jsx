@@ -24,7 +24,7 @@ export default (props) => {
         <div className={`col-12 center mb-25 container`}>
           {!utils.getCachedUsersId() ? (
             <div>
-              <span className="text-btn" onClick={() => Functions.signform()}>
+              <span className="text-btn" onClick={() => Functions.signform(null)}>
                 Sign in
               </span>{" "}
               to see{" "}

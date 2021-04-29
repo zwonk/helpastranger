@@ -94,13 +94,13 @@ export async function auth(req) {
 
   let token;
   if (captcha && !utils.CAPTCHA_EXEMPT.includes("auth"))
-    token = await captcha(); //empty because function name would be secondary param "/fn"
+    token = await captcha("auth"); //empty because function name would be secondary param "/fn"
 
   try {
     let url = API_URL + "auth/";
     let response = await axios(options(url, body, token, true));
     let responseOK =
-      response && response.status === 200 && response.statusText === "OK";
+      response && response.status === 200;
     if (responseOK) {
       data = await response.data;
       return data;
@@ -127,7 +127,7 @@ export async function authAdmin(req) {
     let url = API_URL + "auth/admin/";
     let response = await axios(options(url, body, token, true));
     let responseOK =
-      response && response.status === 200 && response.statusText === "OK";
+      response && response.status === 200;
     if (responseOK) {
       data = await response.data;
       return data;

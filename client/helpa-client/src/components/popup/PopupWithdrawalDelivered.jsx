@@ -8,12 +8,12 @@ export default (props) => {
           <div className="video-container">
             <video
               width="80%"
-              src="img/anim-donated-blue.mov"
+              src="/img/anim-donated-blue.mov"
               autoPlay
               loop
               muted
               playsInline
-              poster="img/spinner.svg"
+              poster="/img/spinner.svg"
               alt="anim-donated"
             />
             </div>

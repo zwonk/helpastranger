@@ -12,12 +12,12 @@ const dispatch = store.dispatch;
 export default {
   fetchToViewAdminData: async function (captcha = null) {
     const usersData = await api("a_admins_get_users_data", {
-      body: { },
+      body: {},
       captcha,
     });
 
     const membersData = await api("a_admins_get_members_data", {
-      body: { },
+      body: {},
       captcha,
     });
 

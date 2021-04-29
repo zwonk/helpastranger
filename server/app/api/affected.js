@@ -212,7 +212,7 @@ module.exports = {
         return { error: locations ? locations.error : DEFAULT_ERROR };
       }
 
-      const edits_query = `select b.affected_id, name, appearance, story
+      const edits_query = `select b.affected_id, name, appearance, story, videolink
               from ( select h.*
                          , row_number() over (partition by h.affected_id order by updated_at desc) as rn
                  from ${EDITS} as h

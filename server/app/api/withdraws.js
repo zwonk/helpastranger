@@ -92,7 +92,7 @@ module.exports = {
         return { error: "Balance could not be found" };
 
       if (userBalanceObj.balance && userBalanceObj.balance.balance < amount) {
-        return { error: "Insufficient balance. Retry in a minute." };
+        return { error: "Retry in a minute if you have a sufficient balance." };
       }
 
       let fiat_amount_post = fiat_amount;

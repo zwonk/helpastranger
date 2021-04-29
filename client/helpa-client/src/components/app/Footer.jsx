@@ -89,6 +89,26 @@ export default (props) => {
             {/*<!-- col end -->*/}
           </div>{" "}
           {/*<!-- row end -->*/}
+          <hr />
+          <div className="foot-menu-bottom small">
+            © Help A Stranger 2022
+            <br />
+            by{" "}
+            <a className="light-grey" href="/about">
+              Help A Stranger Collective
+            </a>
+            <br />
+            <i class="fab fa-github"></i> Open-source{" "}
+            <a className="light-grey" href="https://github.com/zwonk/helpastranger">
+              code
+            </a>
+            <br />
+            <i class="fab fa-ethereum"></i> Commercial rights for for-profit use of this software
+            are held by the owner of{" "}
+            <a className="light-grey" href="https://opensea.io/">
+              this NFT.
+            </a>
+          </div>
         </div>{" "}
         {/*<!-- container end -->*/}
       </footer>

@@ -15,14 +15,13 @@ import L from "leaflet";
 import QrReader from "components/dumb/QrReader";
 import CampaignCard from "components/dumb/CampaignCard";
 
-import {
-  useGoogleReCaptcha
-} from 'react-google-recaptcha-v3';
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 import POPUP from "constants/Popup.constants";
 
 import Functions from "functions/FunctionsMain";
 import CaptchaedFunctions from "functions/CaptchaedFunctions";
+import DoubleCaptchaedFunctions from "functions/DoubleCaptchaedFunctions"; //TODO doubleCaptchaed
 import utils from "functions/utils/utils";
 import useDebounce from "functions/utils/debounce";
 
@@ -39,6 +38,10 @@ export default withRouter((props) => {
 
   const { executeRecaptcha } = useGoogleReCaptcha();
   const captchaedFunctions = new CaptchaedFunctions(executeRecaptcha);
+  const doubleCaptchaedFunctions = new DoubleCaptchaedFunctions(
+    captchaedFunctions,
+    executeRecaptcha
+  );
 
   const homeViewData = useSelector((state) => state.homeViewData);
   const [viewPortVal, setViewPortVal] = useState({
@@ -47,7 +50,6 @@ export default withRouter((props) => {
   });
   const [map, setMap] = useState(null);
   const [affectedPlatformCounter, setAffectedPlatformCounter] = useState(0);
-  
 
   useEffect(() => {
     captchaedFunctions.fetchToHomeViewDataPlatformInfo();
@@ -57,16 +59,21 @@ export default withRouter((props) => {
     handleScan(paramPublicKey);
 
     captchaedFunctions.getUsersMemberState();
+
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
-    if(homeViewData.userLocation && !utils.HOME_MAP_SET_DEFAULT_LOCATION){
+    if (homeViewData.userLocation && !utils.HOME_MAP_SET_DEFAULT_LOCATION) {
       setViewPortVal({
-        center: {lat: homeViewData.userLocation[0], lng: homeViewData.userLocation[1]},
+        center: {
+          lat: homeViewData.userLocation[0],
+          lng: homeViewData.userLocation[1],
+        },
         zoom: ZOOM_START_MAIN,
-      })
+      });
     }
-  }, [homeViewData.userLocation])
+  }, [homeViewData.userLocation]);
 
   useEffect(() => {
     const num = homeViewData.platformInfo.qr_codes_total_used;
@@ -77,7 +84,7 @@ export default withRouter((props) => {
   }, [homeViewData.platformInfo]);
 
   const handleScan = (result) => {
-    if (result) captchaedFunctions.handleScan(result);
+    if (result) doubleCaptchaedFunctions.handleScan(result);
   };
 
   const handleMapChange = (e) => {
@@ -90,13 +97,15 @@ export default withRouter((props) => {
   const debouncedViewPort = useDebounce(viewPortVal, 1000);
 
   useEffect(() => {
-    captchaedFunctions.fetchToHomeViewData(
+    doubleCaptchaedFunctions.fetchToHomeViewData(
       debouncedViewPort.center.lat,
       debouncedViewPort.center.lng,
       debouncedViewPort.zoom,
       map
     );
-  }, [debouncedViewPort]);
+
+    // eslint-disable-next-line
+  }, [debouncedViewPort, executeRecaptcha]);
 
   const redLocatorIcon = L.icon({
     ...L.Icon.Default.prototype.options,
@@ -116,7 +125,7 @@ export default withRouter((props) => {
               onClick={() => dispatch(setReaderActivity(false))}
             ></i>
           </div>
-          <QrReader handleScan={(res) => handleScan(res, true)} />
+          <QrReader handleScan={(res) => handleScan(res)} />
         </div>
       ) : (
         <span
@@ -153,12 +162,16 @@ export default withRouter((props) => {
           <div className="row">
             <div className="col-12 mb-55 single-flow-wrapper">
               <div
-                className="single-flow hue-animated wow animate__animated animate__fadeInUp"
+                className="single-flow first hue-animated wow animate__animated animate__fadeInUp"
                 data-wow-duration="0.9s"
               >
                 <div className="show-flow">
                   <span className="flow-round">
-                    <img src="/img/cube-solid.svg" width="30" alt="bitcoin" />
+                    <img
+                      src="/img/cc-pay-brands.svg"
+                      width="30"
+                      alt="apple-pay"
+                    />
                   </span>
                   <span className="long-arrow">
                     <img src="/img/bitcoin-2.svg" alt="bitcoin" />
@@ -170,9 +183,24 @@ export default withRouter((props) => {
                     />
                   </span>
                 </div>
-                <p className="single-flow-desc">
-                  We donate with cryptocurrencies for you!
-                </p>
+                <div className="single-flow-desc first">
+                  <div className="single-flow-desc-title">
+                    Donate contactless.
+                  </div>
+                  <small>Donate free on us - no account needed.</small>
+                  <br />
+                  <br />
+                  <small>
+                    Load 0{utils.getCrncySign()}+ to your account by sending
+                    crypto - no ID needed.
+                  </small>
+                  <br />
+                  <br />
+                  <small>
+                    Load 30{utils.getCrncySign()}+ to your account via credit
+                    card - no crypto or ID needed.
+                  </small>
+                </div>
               </div>
             </div>{" "}
             {/*<!-- col end -->*/}
@@ -184,14 +212,14 @@ export default withRouter((props) => {
                 <div className="show-flow">
                   <span className="flow-round">
                     <img
-                      src="/img/cc-credit-card-solid.svg"
-                      width="30"
+                      src="/img/map-marker-alt-solid.svg"
+                      width="25"
                       alt="user"
                     />
                   </span>
-                  <span className="long-arrow">
+                  {/*<!--<span className="long-arrow">
                     <img src="/img/bitcoin-2-double.svg" alt="bitcoin" />
-                  </span>
+                  </span> -->*/}
                   <span className="flow-round">
                     <img
                       src="/img/poor-bitcoin.svg"
@@ -200,7 +228,7 @@ export default withRouter((props) => {
                   </span>
                 </div>
                 <p className="single-flow-desc">
-                  Create an account to donate higher amounts
+                  Optionally share your GPS to help us find the beneficiary.
                 </p>
               </div>
             </div>{" "}
@@ -222,7 +250,7 @@ export default withRouter((props) => {
                   </span>
                 </div>
                 <p className="single-flow-desc">
-                  Verified members withdraw cash for the affected person
+                  Members exchange crypto to cash for the beneficiary.
                 </p>
               </div>
             </div>{" "}
@@ -278,52 +306,50 @@ export default withRouter((props) => {
           <h3 className="section-title">Simple as can be</h3>
           <ul>
             <li>
-              We work with the cryptocurrency IOTA{" "}
-              <span className="iota-icon"></span> which is more&nbsp;
+              <span className="iota-icon"></span> We use the cryptocurrency IOTA{" "}
+              which is similar to but more&nbsp;
               <span
                 className="text-btn small"
                 onClick={() => dispatch(popupFn(POPUP.TUT_IOTA_SUSTAINABLE))}
               >
                 sustainable
               </span>
-              &nbsp;than Bitcoin{" "}
-              <span role="img" aria-label="emoji-bitcoin">
-                ₿
+              &nbsp;than Bitcoin.
+            </li>
+            <li>
+              <span role="img" aria-label="emoji-bank">
+                🏦{" "}
               </span>
+              This way you can donate to people that don't have access to bank
+              accounts, and we can avoid fees with intermediaries.
             </li>
             <li>
-              We add our IOTAs on top of public donations subject to
-              availability{" "}
-              <span role="img" aria-label="emoji-chart-rising">
-                📈
-              </span>
+              All donations are direct and 100% feeless. You can even donate
+              without using this website if you understand IOTA.
             </li>
             <li>
-              You have a{" "}
-              <span role="img" aria-label="emoji-free">
-                🆓
-              </span>{" "}
-              IOTA wallet in your account to donate
-            </li>
-            <li>
-              You can charge your account directly via{" "}
               <span role="img" aria-label="emoji-credit-card">
                 💳
-              </span>{" "}
-              card or by receiving IOTA tokens{" "}
+              </span>
+              /
+              <span role="img" aria-label="emoji-apple-logo">
+                
+              </span>
+              /G pay You can load funds to your account directly via credit card
+              or by sending IOTA tokens to it from another 'IOTA wallet'.
             </li>
             <li>
-              Verified members deliver all donations in{" "}
+              <span role="img" aria-label="emoji-checked">
+                ✅
+              </span>{" "}
+              Verified members convert and deliver the donated sum in{" "}
               <span
                 className="text-btn small"
                 onClick={() => Functions.popup(POPUP.TUT_CASHOUT)}
               >
                 cash
               </span>{" "}
-              and get refunded in IOTA by us{" "}
-              <span role="img" aria-label="emoji-checked">
-                ✅
-              </span>
+              while monitoring its use by the beneficiary.
             </li>
           </ul>
         </div>
@@ -336,7 +362,7 @@ export default withRouter((props) => {
         data-wow-delay=".2s"
         data-wow-duration="0.9s"
       >
-        <h3 className="section-title">Find an affected person</h3>
+        <h3 className="section-title">Find a beneficiary</h3>
         <div className="map-img-wrapper">
           <div className="map-img-shadow"> </div>
           <div className="map-img">
@@ -433,7 +459,7 @@ export default withRouter((props) => {
             className="button border-btn right"
             onClick={() => dispatch(popupFn(POPUP.SIGNFORM))}
           >
-            Get started<i className="fas fa-arrow-circle-right"></i>
+            Sign in / Sign up<i className="fas fa-arrow-circle-right"></i>
           </div>
           <div>or</div>
           <div
@@ -483,7 +509,7 @@ export default withRouter((props) => {
                 alt="emoji-city-scape-animated"
                 data-attribution="https://www.behance.net/gallery/45319335/City-Nightscape-GIF-Animation"
                 className="emoji-city-scape-animated"
-                src="img/city-scape-animated.gif"
+                src="/img/city-scape-animated.gif"
               />
             </div>
           </h2>
@@ -510,7 +536,7 @@ export default withRouter((props) => {
           <p>
             <small>
               (of which 10,726 have been estimated to be roughsleeping at least
-              once this year according to&nbsp;
+              once that year according to&nbsp;
               <a
                 className="text-btn"
                 target="_blank"
@@ -532,7 +558,7 @@ export default withRouter((props) => {
               <img
                 alt="emoji-globe-animated"
                 className="emoji-globe-animated"
-                src="img/earth-emoji-spinning.gif"
+                src="/img/earth-emoji-spinning.gif"
               />
             </div>
           </h2>
@@ -548,8 +574,8 @@ export default withRouter((props) => {
         <div className="affected-counter-descriptions container mb-36">
           <p>
             <small>
-              as counted by the total number of{" "}
-              QR codes which received donations since 2021.
+              as counted by the total number of QR codes which received
+              donations since 2021.
             </small>
           </p>
         </div>
@@ -569,7 +595,7 @@ export default withRouter((props) => {
         <div className="container home-last center">
           <div className="video-container">
             <video
-              src="img/animation_waving.mov"
+              src="/img/animation_waving.mov"
               width="50%"
               autoPlay
               loop
@@ -577,6 +603,7 @@ export default withRouter((props) => {
               playsInline
             ></video>
           </div>
+          <div className="spacerPoweredBy"></div>
           <small>
             This platform is powered by{" "}
             <a
@@ -590,6 +617,7 @@ export default withRouter((props) => {
             </a>{" "}
             technology.
           </small>
+          <br />
         </div>
       </section>
     </div>

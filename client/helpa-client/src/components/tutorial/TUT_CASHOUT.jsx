@@ -1,7 +1,15 @@
-import utils from "functions/utils/utils";
 import React from "react";
 
+import utils from "functions/utils/utils";
+import POPUP from "constants/Popup.constants";
+import Functions from "functions/FunctionsMain"
+
 export default (props) => {
+
+ const link = Functions.generateLink({
+    text: "crypto exchange",
+    link: POPUP.IOTA_EXTERNAL_ACCOUNT,
+  });
 
   return (
     <div className="mb-25">
@@ -14,15 +22,18 @@ export default (props) => {
             loop
             muted
             playsInline
-            poster="img/spinner.svg"
+            poster="/img/spinner.svg"
           >
-            <source src="img/anim-cashout.mov" type="video/mp4" />
+            <source src="/img/anim-cashout.mov" type="video/mp4" />
           </video>
         </div>
       </div>
       <ul className="tutorial-list">
         <li>
           <ul className="list-styled">
+            <li>
+              Only members who apply and go through a background check are able to issue cashouts.
+            </li>
             <li>
               As a verified member you are the person delivering beneficiary's their
               donations in cash as they have no technical means to access their
@@ -36,7 +47,7 @@ export default (props) => {
                 utils.getCrncyList().find((x) => x.code === utils.getCrncy())
                   .name
               }{" "}
-              on an exchange.
+              on a {link}.
             </li>
             <li>
               We require your GPS for the cashout, to verify that you are close

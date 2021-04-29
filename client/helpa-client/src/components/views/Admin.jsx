@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 
-import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
-
 import { useDispatch, useSelector } from "react-redux";
+
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 import POPUP from "constants/Popup.constants";
 
@@ -10,13 +10,13 @@ import "react-tabulator/lib/styles.css"; // required styles
 import "react-tabulator/lib/css/tabulator.min.css"; // theme
 import { ReactTabulator } from "react-tabulator"; // for React 15.x, use import { React15Tabulator }
 
-//import { reactFormatter } from "functions/utils/tabulatorUtils";
 import utils from "functions/utils/utils";
 
 import {
   popup as popupFn,
   updatePopupContent,
 } from "reducers/slices/popupSlice";
+
 import CaptchaedFunctions from "functions/CaptchaedFunctions";
 
 /*
@@ -39,7 +39,7 @@ export default () => {
 
   const dateSorter = (a, b) => new Date(a) > new Date(b);
 
-  const divideHundred = (x) => !x ? null : parseFloat(x / 100)
+  const divideHundred = (x) => (!x ? null : parseFloat(x / 100));
 
   const columnsUsers = [
     {
@@ -62,8 +62,8 @@ export default () => {
       field: "membership_motivation",
       headerFilter: "input",
     },
-    { title: "Registered", field: "created_at",  sorter: dateSorter },
-    { title: "Flagged", field: "flagged", sorter: dateSorter},
+    { title: "Registered", field: "created_at", sorter: dateSorter },
+    { title: "Flagged", field: "flagged", sorter: dateSorter },
     {
       title: "Flag?",
       field: "flagged_true",
@@ -76,7 +76,7 @@ export default () => {
       field: "donation_fiat_amount_sum",
       headerFilter: "input",
       width: 150,
-      mutator:divideHundred,
+      mutator: divideHundred,
     },
     {
       title: "Donation count",
@@ -89,7 +89,7 @@ export default () => {
       field: "cashouts_fiat_amount_sum",
       headerFilter: "input",
       width: 150,
-      mutator:divideHundred,
+      mutator: divideHundred,
     },
     {
       title: "Cashouts count",
@@ -102,7 +102,7 @@ export default () => {
       field: "withdraws_fiat_amount_sum",
       headerFilter: "input",
       width: 150,
-      mutator:divideHundred,
+      mutator: divideHundred,
     },
     {
       title: "Withdraws count",
@@ -129,15 +129,15 @@ export default () => {
     },
   ];
 
-  const columnsMembers = [    
+  const columnsMembers = [
     {
-    title: "Membership changed",
-    field: "membership_changed",
-    sorter: dateSorter,
-    width: 250,
-  },
-  ...columnsUsers,
-  ]
+      title: "Membership changed",
+      field: "membership_changed",
+      sorter: dateSorter,
+      width: 250,
+    },
+    ...columnsUsers,
+  ];
 
   const columns = columnsMembers;
 
@@ -161,6 +161,7 @@ export default () => {
     } else {
       captchaedFunctions.fetchToViewAdminData();
     }
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -171,6 +172,7 @@ export default () => {
     if (adminData.membersData) {
       setMembersData(convertToTableData(adminData.membersData));
     }
+    // eslint-disable-next-line
   }, [adminData]);
 
   const convertToTableData = (data) =>
@@ -179,7 +181,9 @@ export default () => {
       columns.map(
         (c) =>
           (newD[c.field] =
-            c.sorter === "date" ? utils.formatDate({date: new Date(d[c.field])}, "date") : d[c.field])
+            c.sorter === "date"
+              ? utils.formatDate({ date: new Date(d[c.field]) }, "date")
+              : d[c.field])
       );
       newD.hash = utils.hashCode(d.users_id);
       newD.flagged_true = !(d.flagged === null);

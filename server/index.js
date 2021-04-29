@@ -33,8 +33,7 @@ if (process.env.NODE_ENV === "test") {
   //console.log = () => {}
 }
 
-if (process.env.NODE_ENV === "production"
-  && process.env.DEV === "false") {
+if (parseInt(process.env.CONSOLE_OFF) === 1) {
     console.log = function () { };
 }
 

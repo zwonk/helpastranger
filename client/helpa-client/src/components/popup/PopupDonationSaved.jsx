@@ -12,12 +12,12 @@ export default () => {
         <div className="video-container mb-25">
           <video
             width="80%"
-            src="img/anim-donated.mov"
+            src="/img/anim-donated.mov"
             autoPlay
             loop
             muted
             playsInline
-            poster="img/anim-donated.jpg"
+            poster="/img/anim-donated.jpg"
             alt="donation-saved"
           />
         </div>

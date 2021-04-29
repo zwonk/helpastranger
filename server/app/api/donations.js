@@ -389,7 +389,7 @@ module.exports = {
 
         if (!balanceObj || !balanceObj.balance || balanceObj.error || 
           balanceObj.balance.balance < iota_amount) {
-          return { error: "Insufficient balance. Retry in a minute." };
+          return { error: "Retry in a minute if you have a sufficient balance." };
         }
 
         /* dust may not remain on sender address */

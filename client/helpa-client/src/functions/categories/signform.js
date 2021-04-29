@@ -25,7 +25,8 @@ export default {
     let followActionPost = followAction || store.getState().popup.popup.last();
 
     dispatch(popup(POPUP.SIGNFORMBACK));
-    dispatch(addHomeViewData({ followAction: followActionPost })); //TODO bind captchas to followAction!
+    //no captcha binding necessary as signForm only triggers followAction, the actual signin though happens through SIGNFORMBACK
+    dispatch(addHomeViewData({ followAction: followActionPost }));
   },
 
   signFormWithFollowAction: async function (payload, captcha = null) {
@@ -66,9 +67,11 @@ export default {
         dispatch(popup(null));
       }
 
-      this.fetchMemeToData()
+      this.fetchMemeToData();
 
-      if (redirect) dispatch(redirectFn(redirect));
+      if (!followAction && redirect) dispatch(redirectFn(redirect));
+    } else {
+      dispatch(addHomeViewData({ followAction: followAction }));
     }
   },
 

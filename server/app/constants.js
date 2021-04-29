@@ -14,7 +14,7 @@ module.exports = {
   LIMIT: 25,
   HOMEPAGE_LOCATIONS_LIMIT: parseInt(process.env.HOMEPAGE_LOCATIONS_LIMIT) || 0,
   MI: 1000000,
-  DEFAULT_ERROR: "An unknown error occurred.",
+  DEFAULT_ERROR: "Errors happen. Just try again.",
   CRNCY: "USD",
   PLAUSBILITY_LOCATION_DISTANCE: parseInt(process.env.PLAUSBILITY_LOCATION_DISTANCE), //m
   PLAUSBILITY_LOCATION_MONTHS: 3, //months

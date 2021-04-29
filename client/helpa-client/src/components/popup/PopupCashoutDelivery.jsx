@@ -29,12 +29,12 @@ export default (props) => {
             <div>
               <video 
                   width="80%"
-                  src="img/anim-cashout.mov"
+                  src="/img/anim-cashout.mov"
                   autoPlay
                   loop
                   muted
                   playsInline
-                  poster="img/spinner.svg"
+                  poster="/img/spinner.svg"
                   alt="person delivering cash"
                   />
             </div>

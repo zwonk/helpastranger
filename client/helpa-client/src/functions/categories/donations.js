@@ -154,16 +154,16 @@ export default {
             "a_locations_create",
             {
               body,
+              captcha
             },
-            captcha
           );
         } else {
           await api(
             "locations_create",
             {
               body,
+              captcha
             },
-            captcha
           );
         }
         //no error. donation always possible even without location

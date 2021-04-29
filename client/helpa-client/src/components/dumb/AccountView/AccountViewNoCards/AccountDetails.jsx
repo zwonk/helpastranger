@@ -5,8 +5,40 @@ import POPUP from "constants/Popup.constants";
 import utils from "functions/utils/utils";
 import Functions from "functions/FunctionsMain";
 
+function checkIOS() {
+  return [
+    'iPad Simulator',
+    'iPhone Simulator',
+    'iPod Simulator',
+    'iPad',
+    'iPhone',
+    'iPod'
+  ].includes(navigator.platform)
+  // iPad on iOS 13 detection
+  || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+  || (!window.MSStream && /iPad|iPhone|iPod/.test(navigator.userAgent));
+}
+
+function checkAndroid(){
+  var ua = navigator.userAgent.toLowerCase();
+  return ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+}
+
+function payOptionIconCheck() {
+  if(checkIOS()){
+    return "iphone"
+  } else if(checkAndroid()){
+    return "android"
+  } else {
+    return false;
+  }
+}
+
 export default (props) => {
   const d = props.data.ACCOUNT_DETAILS;
+
+  const payOption = payOptionIconCheck();
+  const payOptionIcon = payOption === "iphone" ? "cc-apple-pay-brands-b.svg" : "google-pay-brands-b.svg"
 
   const renderUserDataBalance = () => {
     let str = "";
@@ -44,7 +76,7 @@ export default (props) => {
           >
             <b>Account balance</b>
             <p className="left">
-              Charge it directly via credit card or by&nbsp;
+              Load funds to it directly via credit card or by&nbsp;
               <span
                 className="text-btn"
                 onClick={() => Functions.popup(POPUP.TUT_IOTA_SENDING)}
@@ -62,7 +94,14 @@ export default (props) => {
               onClick={() => Functions.popup(POPUP.CHARGE_ACCOUNT)}
             >
               <div className="">{renderUserDataBalance()}</div>
-              <div className="small">Add money via credit card</div>
+              <div className={!payOption ? "small" : "black"} style={{fontSize: "16px"}} >Add money via{" "}
+              {!payOption ? "credit card" : (<img
+                      src={"/img/"+ payOptionIcon}
+                      height={payOption === "iphone" ? 18 : 30}
+                      style={{lineHeight: "25px"}}
+                      alt="credit card"
+                    />)}
+                </div>
             </div>
           </div>
         </div>
@@ -133,14 +172,36 @@ export default (props) => {
         </div>
       </div>
 
+      <div className="col-12 mb-55 center container">
+        <div
+          className="wow animate__animated animate__fadeInUp"
+          data-wow-duration="0.9s"
+        >
+          <b>Private key</b>
+          <p className="left">
+            This is the private key that lets you access your funds even without
+            this platform.
+            <br />
+            <small>
+              Note: Never show your private key to anyone nor copy it to your
+              computer. It's best to write it on a piece of paper. Follow online
+              guidelines how to transfer funds using this key.
+            </small>
+          </p>
+          <div
+            className="border-box link-box blue"
+            onClick={() => props.showPrivateKey()}
+          >
+            Show private key
+          </div>
+        </div>
+      </div>
+
       <div className="container mb-55 center small">
-      <p>
+        <p>
           Questions?
           <br />
-          <a
-            className="text-btn"
-            href="/faq"
-          >
+          <a className="text-btn" href="/faq">
             FAQ
           </a>
         </p>

@@ -26,6 +26,15 @@ export default {
     code: "EUR",
     name_plural: "euros",
   },
+  GBP: {
+    symbol: "£",
+    name: "British Pound Sterling",
+    symbol_native: "£",
+    decimal_digits: 2,
+    rounding: 0,
+    code: "GBP",
+    name_plural: "British pounds sterling",
+  },
   AED: {
     symbol: "AED",
     name: "United Arab Emirates Dirham",
@@ -331,15 +340,6 @@ export default {
     rounding: 0,
     code: "ETB",
     name_plural: "Ethiopian birrs",
-  },
-  GBP: {
-    symbol: "£",
-    name: "British Pound Sterling",
-    symbol_native: "£",
-    decimal_digits: 2,
-    rounding: 0,
-    code: "GBP",
-    name_plural: "British pounds sterling",
   },
   GEL: {
     symbol: "GEL",

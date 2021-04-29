@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
 
-import {
-  useGoogleReCaptcha
-} from 'react-google-recaptcha-v3';
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 import {
   ACCOUNT_DETAILS,
@@ -12,9 +10,7 @@ import {
 
 import ACCOUNT_VIEW from "components/dumb/AccountView/AccountViewWrapper";
 
-import {
-  ACCOUNT_CARDS,
-} from "components/dumb/AccountView/AccountViewCardsWrapper";
+import { ACCOUNT_CARDS } from "components/dumb/AccountView/AccountViewCardsWrapper";
 
 import AccountViewSwitcher from "components/dumb/AccountView/AccountViewSwitcher";
 
@@ -24,16 +20,20 @@ import VIEW_TEXTS from "constants/ViewTexts.constants";
 
 import { useSelector, useDispatch } from "react-redux";
 import { showModal } from "reducers/slices/topModalSlice";
-import { popup as popupFn, updatePopupContent } from "reducers/slices/popupSlice";
+import {
+  popup as popupFn,
+  updatePopupContent,
+} from "reducers/slices/popupSlice";
 
 import CaptchaedFunctions from "functions/CaptchaedFunctions";
 import Functions from "functions/FunctionsMain";
 import utils from "functions/utils/utils";
 
 export default (props) => {
-  
   useEffect(() => {
     captchaedFunctions.switchAccountView(0, null, null);
+
+    // eslint-disable-next-line
   }, []);
 
   const dispatch = useDispatch();
@@ -61,7 +61,7 @@ export default (props) => {
   };
 
   const handleContentClick = (content, i, view) => {
-    dispatch(updatePopupContent({view, i}));
+    dispatch(updatePopupContent({ view, i }));
 
     switch (view) {
       case VIEWS.ACCOUNT_LAST_DONATIONS:
@@ -112,34 +112,36 @@ export default (props) => {
 
     const renderContentCards = (props) => {
       if (ACCOUNT_CARD_VIEWS.includes(view))
-      return (
-        <ACCOUNT_CARDS
-          loadMore={() => loadMore(view)}
-          data={accountViewData}
-          affectedData={affectedData}
-          view={view}
-          handleContentClick={(content, i) =>
-            handleContentClick(content, i, view)
-          }
-        />
-      );
+        return (
+          <ACCOUNT_CARDS
+            loadMore={() => loadMore(view)}
+            data={accountViewData}
+            affectedData={affectedData}
+            view={view}
+            handleContentClick={(content, i) =>
+              handleContentClick(content, i, view)
+            }
+          />
+        );
       else if (view === VIEWS.ACCOUNT_DETAILS)
         return (
           <ACCOUNT_DETAILS
             data={accountViewData}
             startWithdraw={() => Functions.startWithdraw()}
+            showPrivateKey={() => captchaedFunctions.showPrivateKey()}
             modal={(str) => dispatch(showModal(str))}
           />
         );
       else if (view === VIEWS.ACCOUNT_STATISTICS)
-        return (
-          <ACCOUNT_STATISTICS data={accountViewData} />
-        );
+        return <ACCOUNT_STATISTICS data={accountViewData} />;
       else if (view === VIEWS.ACCOUNT_SETTINGS)
         return (
           <ACCOUNT_SETTINGS
             startMembershipApply={() => Functions.startMembershipApply()}
-            signOut={() => {Functions.signOut(); Functions.redirect(VIEWS.SIGNOUT)}}
+            signOut={() => {
+              Functions.signOut();
+              Functions.redirect(VIEWS.SIGNOUT);
+            }}
             onEditUser={() => captchaedFunctions.onEditUser()}
             deleteAccount={() => captchaedFunctions.deleteAccount()}
             data={accountViewData}
@@ -182,7 +184,7 @@ export default (props) => {
                   <img
                     alt="old-tv"
                     className="pro-pic-tube"
-                    src="img/oldtv.svg"
+                    src="/img/oldtv.svg"
                   ></img>
                 ) : (
                   ""

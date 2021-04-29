@@ -101,52 +101,6 @@ module.exports = {
     },
 
     /**
-     * (Public) Get All Locations For A City that a user has donated to
-     *
-     * @param      {default}  body     x,y, users_id // distance, start
-     *
-     * @returns     {default}  eror | result array
-     */
-    locations_get_all_for_city_usermatched: async function (req) {
-
-      const start = req.body.start || 0;
-      const users_id = req.body.users_id;
-      let { x, y, distance } = req.body;
-
-      if (!users_id) return { error: "Empty users_id" };
-      if (!x || !y) return { error: "No location provided" };
-
-      x = parseFloat(mysql.escape(x));
-      y = parseFloat(mysql.escape(y));
-      distance = distance
-        ? parseFloat(mysql.escape(distance))
-        : PLAUSBILITY_LOCATION_DISTANCE;
-
-      const query = `select b.affected_id, b.x, b.y, location_description, location_address, b.created_at,
-								  curr_fiat_amount
-						    from ( select h.*
-						               , row_number() over (partition by h.affected_id order by updated_at desc) as rn
-									 from ${LOCATIONS} as h
-									 WHERE h.created_at >= NOW() - INTERVAL ${LOCATION_MAP_TIMEFRAME} DAY
-						          ) as b
-							 inner join (
-							 	SELECT SUM(fiat_amount) as curr_fiat_amount, affected_id FROM ${DONATIONS}
-								 WHERE txhash IS NOT NULL
-								 AND users_id = ${(mysql.escape(users_id))}
-								 GROUP BY users_id, affected_id
-							) AS g ON g.affected_id = b.affected_id
-							where rn = 1
-							AND ST_Distance_Sphere(point(b.x, b.y), point(${x},${y})) < ${distance}
-						    ORDER BY b.created_at DESC
-							LIMIT ${parseInt(mysql.escape(start))}, ${Math.max(
-        HOMEPAGE_LOCATIONS_LIMIT,
-        parseInt(LIMIT)
-      )}
-							`;
-      return this.db.customSQL(query);
-    },
-
-    /**
      * (Public) Create a location
      *
      * @param      {default}  body    affected_id // x, y, location_description
@@ -169,6 +123,53 @@ module.exports = {
     },
   },
   private: {
+
+     /**
+     * (Public) Get All Locations For A City that a user has donated to
+     *
+     * @param      {default}  body     x,y, users_id // distance, start
+     *
+     * @returns     {default}  eror | result array
+     */
+    a_locations_get_all_for_city_usermatched: async function (req) {
+
+      const start = req.body.start || 0;
+      const users_id = req.body.users_id;
+      let { x, y, distance } = req.body;
+
+      if (!users_id) return { error: "Empty users_id" };
+      if (!x || !y) return { error: "No location provided" };
+
+      x = parseFloat(mysql.escape(x));
+      y = parseFloat(mysql.escape(y));
+      distance = distance
+        ? parseFloat(mysql.escape(distance))
+        : PLAUSBILITY_LOCATION_DISTANCE;
+
+      const query = `select b.affected_id, b.x, b.y, location_description, location_address, b.created_at,
+                  curr_fiat_amount
+                from ( select h.*
+                           , row_number() over (partition by h.affected_id order by updated_at desc) as rn
+                   from ${LOCATIONS} as h
+                   WHERE h.created_at >= NOW() - INTERVAL ${LOCATION_MAP_TIMEFRAME} DAY
+                      ) as b
+               inner join (
+                SELECT SUM(fiat_amount) as curr_fiat_amount, affected_id FROM ${DONATIONS}
+                 WHERE txhash IS NOT NULL
+                 AND users_id = ${(mysql.escape(users_id))}
+                 GROUP BY users_id, affected_id
+              ) AS g ON g.affected_id = b.affected_id
+              where rn = 1
+              AND ST_Distance_Sphere(point(b.x, b.y), point(${x},${y})) < ${distance}
+                ORDER BY b.created_at DESC
+              LIMIT ${parseInt(mysql.escape(start))}, ${Math.max(
+        HOMEPAGE_LOCATIONS_LIMIT,
+        parseInt(LIMIT)
+      )}
+              `;
+      return this.db.customSQL(query);
+    },
+
     /**
      * Create a location
      *

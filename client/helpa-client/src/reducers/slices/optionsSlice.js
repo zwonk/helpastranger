@@ -5,9 +5,9 @@ import utils from "functions/utils/utils";
 const OPTIONS_INIT = {
   amountOptions: [
     {
-      value: 300,
+      value: 200,
       emoji: "emoji-yellow-heart",
-      text: `3.0${utils.getCrncySign()}`,
+      text: `2.0${utils.getCrncySign()}`,
     },
     {
       value: 500,

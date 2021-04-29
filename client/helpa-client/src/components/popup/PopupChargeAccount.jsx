@@ -2,7 +2,6 @@ import React from "react";
 
 import POPUP from "constants/Popup.constants";
 import Functions from "functions/FunctionsMain";
-import utils from "functions/utils/utils";
 
 export default (props) => {
   const fusedData = props.fusedData;
@@ -51,22 +50,26 @@ export default (props) => {
               <ul className="list-styled">
                 <li>
                   The widget below is powered by {link0} which allows you to buy
-                  IOTA safely and without storing any of your personal
+                  IOTA (MIOTA) safely and without storing any of your personal
                   information. Follow the instruction in the widget below or see
-                  the {link3}
+                  the {link3}.
                 </li>
                 <li>
-                  You can {link2} the tokens at any time back to an {link1} and
-                  from their to cash.
+                  You can {link2} the IOTA tokens at any time back to an {link1}{" "}
+                  and from there to cash.
                 </li>
                 <li>
-                  At the moment, we recommend a minimum 35{utils.getCrncySign()}{" "}
-                  purchase to avoid high fees.
+                  We recommend choosing <b>moonpay</b> in the next page as it
+                  allows for conversions below 50$ <b>without identification</b>
+                  .
                 </li>
                 <li>
-                  On iPhones you need to enable third party cookies through:
-                  System Settings {">"} Safari {">"} Prevent Cross-Site Tracking{" "}
-                  {">"} Off
+                  On iPhones you might need to enable third party cookies
+                  through: System Settings {">"} Safari {">"} Prevent Cross-Site
+                  Tracking {">"} Off
+                </li>
+                <li>
+                Scroll down inside the widget until the "Buy" button appears
                 </li>
               </ul>
             </li>

@@ -2,7 +2,7 @@ var mysql = require("mysql");
 const promisify = require("util");
 const utils = require("./utils.js");
 
-const config = process.env.db_url;
+const config = process.env.db_url || (process.env.JAWSDB_URL+"?charset=utf8mb4");
 
 const {
   API_KEY,

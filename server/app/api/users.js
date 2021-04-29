@@ -86,7 +86,8 @@ module.exports = {
         permissionRequired
       );
 
-      if (!userBlank || userBlank.insertId === 0) { //0 because uuid
+      if (!userBlank || userBlank.insertId === 0) {
+        //0 because uuid
         const { seed, mnemonic } = generatePrivateKey();
 
         const curr_public_key = await createPublicKey(seed.plain);
@@ -143,8 +144,7 @@ module.exports = {
         body: { username_hash: username_email_hash },
       });
 
-      if(!userdata || userdata.error)
-        return true;
+      if (!userdata || userdata.error) return true;
 
       if (userdata && userdata.length > 0) {
         userdata = userdata[0];
@@ -155,8 +155,7 @@ module.exports = {
         userdata = userdata[0];
       }
 
-      if(!userdata || userdata.error || userdata.length === 0)
-        return true;
+      if (!userdata || userdata.error || userdata.length === 0) return true;
 
       const passw_recovery_date = userdata.passw_recovery_date;
 
@@ -175,14 +174,18 @@ module.exports = {
         //send mail with new_passw
         var mailOptions = {
           from: {
-            name: 'helpastranger.net',
-            address: HELPA_EMAIL_SENDER
+            name: "helpastranger.net",
+            address: HELPA_EMAIL_SENDER,
           },
           to: crypto.decrypt(userdata.email),
           subject: "Password recovery",
           text:
-            "Hello " + crypto.decrypt(userdata.username) +",\n\n" +
-            "you requested a new password on "+ DOMAIN_URL +"\n\n" +
+            "Hello " +
+            crypto.decrypt(userdata.username) +
+            ",\n\n" +
+            "you requested a new password on " +
+            DOMAIN_URL +
+            "\n\n" +
             "Please use the following password at your next login and change it immediately after.\n\n" +
             "\n\n" +
             "New password: " +
@@ -247,6 +250,8 @@ module.exports = {
       const users_id =
         idType === USERS ? await getUsersIdFromApiKey(apiKey) : id;
 
+      //TODO error in stats aggregation when they are in status "processing"
+
       //no need to check apiKey validity because were getting users_id through apiKey
       const query = ` SELECT * FROM ${idType}
 							LEFT JOIN (SELECT ${idType}_id , crncy as donations_crncy,  SUM(fiat_amount) as donations_fiat_amount_sum, COUNT(id) as donations_count FROM donations WHERE txhash IS NOT NULL GROUP BY users_id, crncy) as tab1 ON tab1.${idType}_id = ${idType}.id
@@ -261,8 +266,12 @@ module.exports = {
       }
 
       const merge = true;
-      return await fiatSumCrncyAggregator(res, crncy, ["donations", "cashouts", "withdraws"], merge);
-
+      return await fiatSumCrncyAggregator(
+        res,
+        crncy,
+        ["donations", "cashouts", "withdraws"],
+        merge
+      );
     },
 
     /**
@@ -400,7 +409,7 @@ module.exports = {
       // check if fields were explicitly set empty in request
       const p = (x) => body.hasOwnProperty(x);
 
-      if (p("email")){
+      if (p("email")) {
         const email_hash_new = utils.getSHA256ofJSON(email);
         userdataNew = await this.db.simpleGetHandler(USERSDATA, {
           body: { email_hash: email_hash_new },
@@ -472,7 +481,27 @@ module.exports = {
       }
 
       if (motivation.toString().length > MAX_MOTIVATION_INPUT) {
-        return { error: `Allowed chars for motivation: ${MAX_MOTIVATION_INPUT}.` };
+        return {
+          error: `Allowed chars for motivation: ${MAX_MOTIVATION_INPUT}.`,
+        };
+      }
+
+      var mailOptions = {
+        from: HELPA_EMAIL_SENDER,
+        to: HELPA_EMAIL_SENDER,
+        subject: "Membership application",
+        text: "Somebody applied for membership!" + "\n\n" + motivation + "\n\n",
+      };
+
+      try {
+        const res = await mailer.sendMail(mailOptions);
+        console.log(res);
+        if (!res || !res.messageId) {
+          throw new Error();
+        }
+      } catch (err) {
+        console.log(err);
+        /* no error handling necessary cause membershp will be noticed in admin panel */
       }
 
       //don't check for multi apply, since it will only change one data row, and is also prevented in ui
@@ -594,6 +623,37 @@ module.exports = {
     },
 
     /**
+     * Get priv_key for user
+     *
+     * @param      {default}  params   users_id
+     * @param      {default}  session  apiKey
+     *
+     * @returns    {default}  error | data object
+     */
+    a_users_get_private_key: async function (req) {
+      const { users_id } = req.body;
+      const apiKey = req.session.apiKey;
+
+      /* get current user **/
+      const permissionRequired = true;
+      const idFromUser = true;
+      let user = await this.db.getHandler(
+        USERSDATA,
+        { params: { id: users_id, idType: USERS, apiKey } },
+        permissionRequired,
+        idFromUser
+      );
+      if (user == null || (user && user.length !== 1)) {
+        return { error: "Resource can't be loaded." };
+      }
+      const { mnemonic } = user[0];
+
+      return {
+        private_key: crypto.decrypt(mnemonic),
+      };
+    },
+
+    /**
      *  Get user balance
      *
      * @param      {default}  body    	//
@@ -603,7 +663,7 @@ module.exports = {
      */
     a_users_get_balance: async function (req) {
       const apiKey = req.session.apiKey;
-      const  crncy  = req.body.crncy || CRNCY;
+      const crncy = req.body.crncy || CRNCY;
 
       const users_id = await getUsersIdFromApiKey(apiKey);
 

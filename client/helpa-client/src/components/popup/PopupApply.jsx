@@ -29,7 +29,7 @@ export default (props) => {
         <hr />
 
         <div className="popup-apply-meme mb-25">
-          <img src="img/reason-meme.jpg" alt="reason-meme"></img>
+          <img src="/img/reason-meme.jpg" alt="reason-meme"></img>
         </div>
 
         <div>

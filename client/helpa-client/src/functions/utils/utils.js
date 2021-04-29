@@ -1,4 +1,4 @@
-import currencySymbols from "./currencySymbols"
+import currencySymbols from "./currencySymbols";
 
 const AFFECTED_DATA = "affected_data";
 const AFFECTED_DATA_LOCATIONS = "affected_data_locations";
@@ -11,8 +11,17 @@ function utils() {}
 utils.MI = 1000000;
 utils.KI = 1000;
 utils.IOTA_EXPLORER = parseInt(process.env.REACT_APP_CHRYSALIS)
-  ? (!process.env.REACT_APP_DEV || process.env.REACT_APP_DEV === "true" ? "https://explorer.iota.org/testnet/transaction/" : "https://explorer.iota.org/mainnet/transaction/")
-  : "https://explorer.iota.org/devnet/transaction/"; //"https://comnet.thetangle.org/transaction/";
+  ? !process.env.REACT_APP_DEV || process.env.REACT_APP_DEV === "true"
+    ? "https://explorer.tanglebay.com/comnet/message/"
+    : "https://explorer.iota.org/mainnet/transaction/"
+  : "https://explorer.iota.org/legacy-devnet/transaction/";
+
+utils.IOTA_EXPLORER_ADDRESS = parseInt(process.env.REACT_APP_CHRYSALIS)
+  ? !process.env.REACT_APP_DEV || process.env.REACT_APP_DEV === "true"
+    ? "https://explorer.tanglebay.com/comnet/addr/"
+    : "https://explorer.iota.org/mainnet/addr/"
+  : "https://explorer.iota.org/legacy-devnet/addr/";
+
 utils.ZOOM_START = 17;
 utils.ZOOM_START_MAIN = 11;
 utils.TEN_SEC = 10000;
@@ -21,12 +30,14 @@ utils.NO_ERROR = "0";
 utils.USERS_ID = "users_id";
 utils.USERS = "users";
 utils.REFETCH_TIME = process.env.NODE_ENV === "production" ? 4000 : 5000;
-utils.HOME_MAP_SET_DEFAULT_LOCATION = parseInt(process.env.REACT_APP_HOME_MAP_SET_DEFAULT_LOCATION)
-utils.DEFAULT_ERROR = "An unkown error occured.";
+utils.HOME_MAP_SET_DEFAULT_LOCATION = parseInt(
+  process.env.REACT_APP_HOME_MAP_SET_DEFAULT_LOCATION
+);
+utils.DEFAULT_ERROR = "Errors happen... Just try again.";
 utils.ROLLOUT_CAMPAIGNS = false;
 utils.ROLLOUT_RECURRENTS = false;
-utils.DOMAIN_URL = "https://"+process.env.REACT_APP_DOMAIN;
-utils.MAIL = "info@"+process.env.REACT_APP_DOMAIN;
+utils.DOMAIN_URL = "https://" + process.env.REACT_APP_DOMAIN;
+utils.MAIL = "info@" + process.env.REACT_APP_DOMAIN;
 utils.QR_SITE = "q";
 utils.HASH_LENGTH = 64;
 utils.LIMIT = 25;
@@ -46,9 +57,8 @@ utils.ADMIN_ACTIONS = {
 utils.CAPTCHA_EXEMPT = [
   "donations_get",
   "a_donations_get",
-  "locations_get_all_for_city_usermatched",
-  "locations_get_all_for_city",
   "qr_codes_get_platform_count",
+  "locations_get_all_for_city",
   "a_users_get_balance",
   "a_users_get_data",
   "a_donations_and_saved_get_all",
@@ -103,42 +113,55 @@ utils.getCrncy = () => {
 };
 
 utils.getCrncySign = (crncy = null) => {
-  if(crncy === null){
-    crncy = utils.getCrncy()
+  if (crncy === null) {
+    crncy = utils.getCrncy();
   }
 
-  const sign = currencySymbols[crncy]
-  if(sign){
-    return sign.symbol_native
+  const sign = currencySymbols[crncy];
+  if (sign) {
+    return sign.symbol_native;
   } else {
-    return "?"
+    return "?";
   }
-}
+};
 
-utils.getCrncyList = () => Object.values(currencySymbols);
+utils.getCrncyList = () =>
+  Object.values(currencySymbols).sort((a, b) => {
+    if (["GBP", "USD", "EUR", "CAD"].includes(a.code)) {
+      return -1;
+    } else {
+      return (a.name > b.name) - (a.name < b.name);
+    }
+  });
 
 utils.setCrncy = (crncy) => {
   localStorage.setItem("crncy", JSON.stringify(crncy));
-}
+};
 
 utils.setBottomPopupState = (state) => {
-  localStorage.setItem("bottomPopupState", JSON.stringify(state))
-}
+  localStorage.setItem("bottomPopupState", JSON.stringify(state));
+};
 
 utils.getBottomPopupState = () => {
-  const bottomPopupState = localStorage.getItem("bottomPopupState")
+  const bottomPopupState = localStorage.getItem("bottomPopupState");
   return bottomPopupState ? JSON.parse(bottomPopupState) : null;
-}
+};
 
 utils.formatBalance = (balance, subVar = null, crncy = null) => {
   const subBalance = balance && subVar ? balance[subVar] : balance;
   return balance == null
     ? "Loading"
-    : utils.addZeroes(subBalance / 100) + " " + utils.getCrncySign(crncy);
+    : utils.addZeroes(Math.floor(subBalance) / 100) +
+        " " +
+        utils.getCrncySign(crncy);
 };
 
-utils.formatFiatBalanceOrSmaller = (balance, crncy = null) => { 
-    return ((balance / 100) < 1 ? "<1" : utils.addZeroes(balance / 100)) + " " + utils.getCrncySign(crncy);
+utils.formatFiatBalanceOrSmaller = (balance, crncy = null) => {
+  return (
+    (balance / 100 < 1 ? "<1" : utils.addZeroes(Math.floor(balance) / 100)) +
+    " " +
+    utils.getCrncySign(crncy)
+  );
 };
 
 utils.formatBalanceIota = (balance) => {
@@ -152,7 +175,11 @@ utils.formatBalanceKIota = (balance) => {
 utils.formatBalanceOptional = (balance) => {
   return balance == null || balance === 0
     ? ""
-    : " (" + parseInt(balance) / 100 + " " + utils.getCrncySign() + ")";
+    : " (" +
+        parseInt(Math.floor(balance)) / 100 +
+        " " +
+        utils.getCrncySign() +
+        ")";
 };
 
 utils.handlePassw = (passw) => {
@@ -185,9 +212,8 @@ utils.makeHash = (length = 6) => {
 };
 
 utils.hashCode = (str) => {
-  if(!str)
-    return str;
-    
+  if (!str) return str;
+
   str = str.toString().padStart(5, "0");
   let hash = 0;
   if (str.length === 0) {
@@ -202,10 +228,7 @@ utils.hashCode = (str) => {
 };
 
 utils.mailTo = (str) => {
-  return (
-    `mailto:${utils.MAIL}?subject=${str}a` +
-    utils.makeHash()
-  );
+  return `mailto:${utils.MAIL}?subject=${str}a` + utils.makeHash();
 };
 
 utils.formatDate = (data, field = "created_at") => {
@@ -252,7 +275,7 @@ utils.print = (img, printReadyCallback = {}) => {
     let DPI = 72;
 
     //hack to check for qr res
-    if(HTML_Width === 2480){
+    if (HTML_Width === 2480) {
       DPI = 300;
     }
 
@@ -332,17 +355,18 @@ utils.copyToClipboard = (str) => {
 };
 
 utils.isMobile = () => {
-  const userAgent = typeof window.navigator === "undefined" ? "" : navigator.userAgent;
+  const userAgent =
+    typeof window.navigator === "undefined" ? "" : navigator.userAgent;
   return Boolean(
     userAgent.match(
       /Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i
     )
   );
-}
+};
 
-utils.pdfGenerationEstimate = (qrCodeCount=1) => {
+utils.pdfGenerationEstimate = (qrCodeCount = 1) => {
   return qrCodeCount; //parseInt(qrCodeCount * (utils.isMobile() ? 5 : 1))
-}
+};
 
 utils.dayDifference = (a, b) => {
   const ONE_DAY = 1000 * 60 * 60 * 24;
@@ -387,8 +411,10 @@ utils.seperateCampaignData = (content) => {
 utils.isWithinLastMonth = (data) => {
   var dt = new Date();
 
-
-  return (dt - data) < 1000/*ms*/ * 60/*s*/ * 60/*min*/ * 24/*h*/ * 30/*days*/ * 1/*months*/;
+  return (
+    dt - data <
+    1000 /*ms*/ * 60 /*s*/ * 60 /*min*/ * 24 /*h*/ * 30 /*days*/ * 1 /*months*/
+  );
 };
 
 utils.deduplicate = (x, i, a) => {
@@ -412,19 +438,19 @@ utils.addZeroes = (num, null_default = 0) => {
   return value.toFixed(2);
 };
 
-utils.isLeapYear = function(str) {
+utils.isLeapYear = function (str) {
   var year = str.getFullYear();
-  if((year & 3) !== 0) return false;
-  return ((year % 100) !== 0 || (year % 400) === 0);
+  if ((year & 3) !== 0) return false;
+  return year % 100 !== 0 || year % 400 === 0;
 };
 
 // Get Day of Year
-utils.getDOY = function(str) {
+utils.getDOY = function (str) {
   var dayCount = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
   var mn = str.getMonth();
   var dn = str.getDate();
   var dayOfYear = dayCount[mn] + dn;
-  if(mn > 1 && utils.isLeapYear(str)) dayOfYear++;
+  if (mn > 1 && utils.isLeapYear(str)) dayOfYear++;
   return dayOfYear;
 };
 
@@ -548,8 +574,8 @@ utils.removeByValues = (array, items) => {
 };
 
 utils.pickRandom = (arr) => {
-  return !arr ? null : arr[Math.floor(Math.random() * arr.length)] 
-}
+  return !arr ? null : arr[Math.floor(Math.random() * arr.length)];
+};
 
 /** From npm module old iota.js
  * Checks if input is correct trytes consisting of [9A-Z]; optionally validate length
@@ -570,10 +596,17 @@ utils.isTrytes = function (trytes, length) {
   );
 };
 
-utils.checkQrCodeUrl = (url, captcha=null) => {
+utils.checkQrCodeUrl = (url, captcha = null) => {
   let public_key = url;
-  console.log(url)
-  return public_key.length === utils.HASH_LENGTH; //TODO will always stay that length?
+  if (url.length > utils.HASH_LENGTH) {
+    public_key = public_key.substring(public_key.lastIndexOf("/") + 1);
+  }
+  console.log(url);
+  if (public_key.length === utils.HASH_LENGTH) {
+    return public_key; //TODO will always stay that length?
+  } else {
+    return false;
+  }
 };
 
 export default utils;

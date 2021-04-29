@@ -57,7 +57,7 @@ const self = (module.exports = {
               ORDER BY a.membership_applied DESC
               `;
 
-      //TODO make sensitive fields unavailable inside db.js
+      //TODO check what sensitive fields to make unavailable inside db.js
 
       const ignore = [
           "id",

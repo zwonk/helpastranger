@@ -11,10 +11,10 @@ const DEFAULT_IOTA_ERROR =
   "There seems to be an issue with the iota network. Try again later.";
 
 const client = new ClientBuilder()
-  .node(API)
+  .node(API) //https://api.thin-hornet-0.h.chrysalis-devnet.iota.cafe
   .brokerOptions({ timeout: 50 })
-  .localPow(false)
-  .build();
+  //.localPow(process.env.DEV === "true")
+  .build()
 
 function Iota() {}
 
@@ -23,10 +23,10 @@ async function iotaHandler(promise) {
     const result = await promise;
     return result;
   } catch (err) {
-    if (process.env.NODE_ENV !== "production") {
-      throw err;
+    if (parseInt(process.env.CONSOLE_OFF_IOTA) === 1) {
+      return { error: DEFAULT_IOTA_ERROR }; //err.message || 
     } else {
-      return { error: err.message || DEFAULT_IOTA_ERROR };
+      throw err;
     }
   }
 }
@@ -77,7 +77,10 @@ Iota.getBalance = async (address) => {
     (async () => {
       console.log("---address");
       console.log(address);
+
       const balance = await client.getAddressBalance(address);
+      console.log(balance)
+
       if (balance) {
         return balance;
       } else {
@@ -102,10 +105,8 @@ Iota.sendFunds = async (seed, address, amount) => {
           let zeroMsgIndex = (process.env.NODE_ENV !== "production") ? uuidv4() : uuidv4()//"TODO Help A Stranger is sending love."
           let zeroMsgData = (process.env.NODE_ENV !== "production") ? uuidv4() : `
            Thank you for showing a person in need love by walking up to him!
-           Wondering why there are no funds in this donation?
-           We can only make a limited number of micro-transactions on each address.
-           This is a form of spam protection which is called dust protection in the IOTA world.
-           If you want to donate funds to this address, please create an account.
+           Although there are no funds from us in this transaction maybe in the next one there will be!
+           If you want to donate funds definitely to this person, you can do so with an account.
            Thank you!
            `
 

@@ -19,8 +19,8 @@ const dispatch = store.dispatch;
 
 export default {
   getUsersMemberState: function (captcha = null) {
-    if (utils.getCachedUsersId()){
-     this.fetchToViewUsersData(null, captcha);
+    if (utils.getCachedUsersId()) {
+      this.fetchToViewUsersData(null, captcha);
     }
   },
 
@@ -35,7 +35,14 @@ export default {
       dispatch(addHomeViewData({ platformInfo }));
   },
 
-  fetchToHomeViewData: async function (x, y, zoomLevel, map, captcha = null) {
+  fetchToHomeViewData: async function (
+    x,
+    y,
+    zoomLevel,
+    map,
+    captcha = null,
+    captcha2 = null
+  ) {
     let distance = (60000 / (2 ^ zoomLevel)) * 2;
 
     if (map) {
@@ -60,10 +67,10 @@ export default {
     let affected_locations, affected_locations_usermatched;
 
     const users_id = utils.getCachedUsersId();
-    
-    if (users_id){
+
+    if (users_id) {
       affected_locations_usermatched = await api(
-        "locations_get_all_for_city_usermatched",
+        "a_locations_get_all_for_city_usermatched",
         {
           body: {
             users_id,
@@ -82,16 +89,18 @@ export default {
         y,
         distance,
       },
-      captcha,
+      captcha: captcha2,
     });
 
     if (affected_locations && !affected_locations.error) {
       affected_locations = affected_locations.map((location) => {
-        const affected_locations_usermatched_el = !affected_locations_usermatched
-          ? null
-          : affected_locations_usermatched.find(
-              (x) => x.affected_id === location.affected_id
-            );
+        const affected_locations_usermatched_el =
+          !affected_locations_usermatched ||
+          !Array.isArray(affected_locations_usermatched)
+            ? null
+            : affected_locations_usermatched?.find(
+                (x) => x.affected_id === location.affected_id
+              );
         return {
           ...location,
           user_spent: affected_locations_usermatched_el
@@ -131,22 +140,27 @@ export default {
     dispatch(popup(POPUP.HOME_MAP_AFFECTED_INFO));
   },
 
-  handleScan: async function (result, fullUrl, captcha = null) {
+  handleScan: async function (
+    result,
+    captcha = null,
+    captcha2 = null
+  ) {
     /* 1. qr code recognized */
 
-    if (!utils.checkQrCodeUrl(result, fullUrl)) {
+    const qr_code = utils.checkQrCodeUrl(result)
+    if (!qr_code) {
       return this.error({ error: "QR code not a donation code" });
     }
 
     dispatch(popup(POPUP.QR_RECOGNIZED));
-    dispatch(updateData({ qr_code: result }));
+    dispatch(updateData({ qr_code }));
     dispatch(addPopupContent({ affected_id: null }));
     dispatch(addHomeViewData({ readerActive: false }));
 
     /* 2. get public_key and affected data if connected to the internet */
     let res, res2;
     res = await api("affected_public_key_from_qr", {
-      body: { qr_code: result },
+      body: { qr_code },
       captcha,
     });
 
@@ -157,16 +171,16 @@ export default {
     //TODO let datafusion do this fetching
     res2 = await api("affected_get_data_package", {
       body: { affected_ids: res.affected_id },
-      captcha,
+      captcha: captcha2,
     });
     res2 = res2[0];
 
     // (if not aborted by the user yet)
-    dispatch(
+    /*dispatch(
       updateData({
         campaign: res2.campaign_id ? utils.seperateCampaignData(res2) : null,
       })
-    );
+    );*/
     dispatch(updateAffectedData([res2]));
 
     dispatch(refetchPopupContent());

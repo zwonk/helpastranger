@@ -37,7 +37,7 @@ export function deriveTabForWithdraws(itemData) {
     color = ORANGE;
   }
   if (error && error !== utils.NO_ERROR) {
-    tab = "Error";
+    tab = "Error. Try again later.";
     color = RED;
   }
   return { tab, color, headerText };

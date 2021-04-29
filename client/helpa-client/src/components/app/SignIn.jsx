@@ -8,9 +8,13 @@ import POPUP from "constants/Popup.constants";
 export default () => {
   const dispatch = useDispatch();
 
-
-  useEffect(() => {dispatch(popup(POPUP.SIGNFORM_TO_MAIN))}
-  , []);
+  useEffect(
+    () => {
+      dispatch(popup(POPUP.SIGNFORM_TO_MAIN));
+    },
+    // eslint-disable-next-line
+    []
+  );
 
   return "";
 };

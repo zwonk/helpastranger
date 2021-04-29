@@ -54,12 +54,13 @@ import VIEWS from "constants/Views.constants";
 import TUT_HEADERS from "constants/TutorialHeaders.constants";
 
 import CaptchaedFunctions from "functions/CaptchaedFunctions";
+import DoubleCaptchaedFunctions from "functions/DoubleCaptchaedFunctions";
 import Functions from "functions/FunctionsMain";
 import utils from "functions/utils/utils";
 
 import popupContentFuse from "functions/popupContentFuse";
 
-import store from 'reducers/store';
+import store from "reducers/store";
 
 import { useSelector, useDispatch } from "react-redux";
 import { showModal } from "reducers/slices/topModalSlice";
@@ -83,10 +84,13 @@ export default withRouter((props) => {
 
   const { executeRecaptcha } = useGoogleReCaptcha();
   const captchaedFunctions = new CaptchaedFunctions(executeRecaptcha);
-
+  const doubleCaptchaedFunctions = new DoubleCaptchaedFunctions(
+    captchaedFunctions,
+    executeRecaptcha
+  );
 
   useEffect(() => {
-    console.log("POPUP")
+    console.log("POPUP");
 
     const HOME_MAP_VIEWS = [POPUP.HOME_MAP_AFFECTED_INFO];
 
@@ -115,9 +119,7 @@ export default withRouter((props) => {
     const url = props.location.pathname;
     const isUrlHome = url === "/" + VIEWS.ACCOUNT;
 
-    if (isUrlHome ||
-      (EXTENDED_VIEWS.includes(popup.last()))) {
-      
+    if (isUrlHome || EXTENDED_VIEWS.includes(popup.last())) {
       // just to know what to fetch
       f = popupContentFuse({
         popupMeta,
@@ -163,10 +165,10 @@ export default withRouter((props) => {
           captchaedFunctions.fetchCampaignToData(f.itemData.campaigns_id);
       }
     }
+    // eslint-disable-next-line
   }, [popup, popupContentHash]);
 
   const renderPopup = (popup) => {
-
     // fused popup data from reducers
     let fusedData = popupContentFuse({
       popupMeta,
@@ -175,7 +177,7 @@ export default withRouter((props) => {
       accountViewData,
       homeViewData,
       options,
-      data
+      data,
     });
 
     //const popupTmp = POPUP.ACCOUNT_DONATION_INFO;
@@ -498,6 +500,20 @@ export default withRouter((props) => {
           </Popup>
         );
 
+      /*** PRIVATE_KEY_BOX FROM ACCOUNT_DETAILS ***/
+      case POPUP.PRIVATE_KEY_BOX:
+        return (
+          <Popup ps={PS.NONE} pn="Private Key" close={true}>
+            <div className="mb-25">
+              <b>
+                Store this mnemonic (other form of private key) only on paper:
+              </b>
+              <br />
+              {fusedData.accountViewData[VIEWS.ACCOUNT_DETAILS].private_key}
+            </div>
+          </Popup>
+        );
+
       /***** WITHDRAW ******/
 
       case POPUP.WITHDRAW:
@@ -596,7 +612,9 @@ export default withRouter((props) => {
           <Popup ps={PS.NONE} pn="Create a QR plate" close={true}>
             <PopupQrCreate
               fusedData={fusedData}
-              create={(amount) => captchaedFunctions.qr_create(amount, utils.isMobile())}
+              create={(amount) =>
+                doubleCaptchaedFunctions.qr_create(amount, utils.isMobile())
+              }
             />
           </Popup>
         );
@@ -631,11 +649,11 @@ export default withRouter((props) => {
               signform={() => captchaedFunctions.signform(VIEWS.ACCOUNT)}
               save={
                 utils.getCachedUsersId()
-                ? () => {
-                    dispatch(showModal("QR code saved"));
-                    Functions.popupClose();
-                  }
-                : () => Functions.popupClose()
+                  ? () => {
+                      dispatch(showModal("QR code saved"));
+                      Functions.popupClose();
+                    }
+                  : () => Functions.popupClose()
               }
               report={() => Functions.startReport()}
             />
@@ -822,7 +840,7 @@ export default withRouter((props) => {
         return (
           <Popup
             ps={PS.NONE}
-            pn="Charge your account directly"
+            pn="Load funds to your account directly"
             close={true}
             back={popup.last() === POPUP.CHARGE_ACCOUNT_BACK}
           >
@@ -935,7 +953,7 @@ const PopupDonateViewTemplate = ({
         fusedData={fusedData}
         donate={(obj) => captchaedFunctions.donate(obj)}
         startCashout={() => captchaedFunctions.startCashout()}
-        signform={() => captchaedFunctions.signform()}
+        signform={() => captchaedFunctions.signform(null)}
         back={back}
         modal={(arr) => modal(arr)}
       />

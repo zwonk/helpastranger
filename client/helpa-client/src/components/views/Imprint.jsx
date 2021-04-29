@@ -18,7 +18,7 @@ export default () => {
           <br />
           <br />
           <h2>Contact Information</h2>
-          Phone: +491707281728
+          Phone: Mail only
           <br />
           E-Mail:{" "}
           <a

@@ -58,6 +58,7 @@ export default (props) => {
           <input
             type="username"
             name="username"
+            placeholder="username"
             value={form.username}
             onChange={(e) => formChange("username", e)}
             className="form-control"
@@ -73,6 +74,7 @@ export default (props) => {
           <input
             type="password"
             name="passw"
+            placeholder="password"
             value={form.passw}
             onChange={(e) => formChange("passw", e)}
             className="form-control"

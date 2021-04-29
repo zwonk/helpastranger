@@ -7,8 +7,7 @@
 
 <p align="center">
     <a href="https://david-dm.org/zwonk/helpastranger/" style="text-decoration:none;"><img src="https://david-dm.org/zwonk/helpastranger/heroku-badge.png" alt="Dependencies"></a>
-    <a href="https://snyk.io/test/github/zwonk/helpastranger" style="text-decoration:none;"><img src="https://snyk.io/test/github/zwonk/helpastranger/badge.svg" alt="Known Vulnerabilities"></a>
-     <a href="https://ecosystem.iota.org/tutorials/iota-developer-essentials" style="text-decoration:none;"><img src="https://img.shields.io/badge/iota-ecosystem-yellowgreen.svg)" alt="IOTA Ecosystem"></a>
+     <a href="https://ecosystem.iota.org/" style="text-decoration:none;"><img src="https://img.shields.io/badge/iota-ecosystem-yellowgreen.svg)" alt="IOTA Ecosystem"></a>
 </p>
 
 
@@ -24,7 +23,7 @@
 ---
 
 ## About
-[Help a stranger](https://helpastranger.net) is a platform that allows you to donate to the homeless via crypto.
+[Help a stranger](https://helpastranger.net) is a platform that allows you to donate to the people in need via crypto remotely.
 
 
 ## Prerequisites
@@ -61,10 +60,11 @@ npm start
 open `http://127.0.0.1:3000` not (!) `http://localhost` , because it doesn't allow google captchas.
 
 ### Setting up the External service keys in client/server .env
-- [onramper.com](https://onramper.com/#API-key): REACT_APP_ONRAMPER_API_KEY
-- [google captcha v3](https://www.google.com/recaptcha/):  REACT_APP_RECAPTCHA_KEY, RECAPTCHA_KEY
-- [nomics.com](https://nomics.com/): NOMICS_API_KEY
-- [mail service](https://mailtrap.io/): EMAIL_PASSW
+- [onramper.com](https://onramper.com/#API-key): client - REACT_APP_ONRAMPER_API_KEY
+- [google captcha v3](https://www.google.com/recaptcha/):  client - REACT_APP_RECAPTCHA_KEY, RECAPTCHA_KEY
+- [nomics.com](https://nomics.com/): server - NOMICS_API_KEY
+- [mail service](https://mailtrap.io/): server - EMAIL_PASSW
+- server - db_url must end with `?charset=utf8mb4`
 
 ## Getting started
 Setting a platform user (for "on the house" donations):
@@ -73,10 +73,10 @@ Setting a platform user (for "on the house" donations):
 - Go to the database and set `member_state=1` for this user in `usersdata` to enable cashouts
 - Go to the database and copy `priv_key` for this user.
 - Replace the whitespace with "_" and set it in .env as HELPA_DONATION_ACCOUNT
-- Use a [faucet](https://faucet.testnet.chrysalis2.com/) to send funds to the `curr_public_key` (`account number` in web ui).
+- Use an appropriate [faucet](https://faucet.testnet.chrysalis2.com/) for the testnet or comnet you're using to send funds to the `curr_public_key` (called `account number` in the web ui).
 
 
-Setting an admin user:
+Setting up an admin user:
 - Create a user and copy its `username, username_hash, passw` into `admin` table in the database
 - Go to `/administratorview` to login as admin
 
@@ -125,3 +125,17 @@ Please update the documention when needed by editing [`JSDoc`](http://usejsdoc.o
 ## Joining the discussion
 
 If you want to get involved in the community, need help with getting setup, have any issues related with the library contact this [mail](info@helpastranger.net).
+
+## License
+For non-profit use, commercial or non-commercial this software is licensed under [MIT license](https://opensource.org/licenses/MIT)<Help A Stranger Collective, 2022>.
+For for-profit use, the commercial rights of this software belong to the owner of this [`NFT`](http://opensea.org).
+
+
+The owner of the NFT can be contacted via mail if he publishes his mail and proves the holding of the NFTs.
+As a fallback the `requestAccess` method on the smart contract can be invoked to store a message on the ethereum blockchain regarding for-profit usage of the software. This starts a counter of 2 months after which the NFT will be destroyed if the owner of the NFT does not respond via the `respondToAccessRequest` method. The commercial rights for for-profit use will then be licenses under the [MIT license](https://opensource.org/licenses/MIT)<Help A Stranger Collective, 2022>.
+
+
+Invoking the `requestAccess(string calldata message) ` method requires the sending of 60000 gas as compensation for the cost of the NFT owner to invoke the `respondToAccessRequest(string calldata message)` method. 
+
+## NFT of source code
+The NFT of this source code belongs to the owner of this NFT [`NFT`](http://opensea.org) and included the commercial rights for the for-profit use of the software.

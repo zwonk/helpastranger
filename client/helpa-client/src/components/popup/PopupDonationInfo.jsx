@@ -14,21 +14,25 @@ export default (props) => {
   const [editMode, setEditMode] = useState(false);
   const [fields, setFields] = useState({});
   const [printState, setPrintState] = useState(0);
+  const [storyUnfolded, setStoryUnfolded] = useState(false);
 
   useEffect(() => {
-    setFields(fusedData.affectedData)
-  }, [fusedData.affectedData])
+    setFields(fusedData.affectedData);
+  }, [fusedData.affectedData]);
 
-  const join = (x) => (x.name || "") + (x.appearance || "") + (x.story || "");
+  const join = (x) =>
+    (x.name || "") +
+    (x.appearance || "") +
+    (x.story || "" + (x.videolink || ""));
 
   const onEditMode = (value, field) =>
     setFields((fields) => ({
       ...fields,
       [field]: value,
     }));
-  
+
   const onSubmit = (fields) => {
-    if(editMode){
+    if (editMode) {
       const infosChanged = join(fusedData.affectedData) !== join(fields);
 
       if (infosChanged)
@@ -38,13 +42,29 @@ export default (props) => {
           appearance: fields.appearance,
           story: fields.story,
         });
-      }
+    }
 
     setEditMode((editMode) => !editMode);
   };
 
+  const onToggleStory = () => setStoryUnfolded(!storyUnfolded);
+
   const infosChanged = join(fusedData.affectedData) !== join(fields);
-  const noInfos = !(fields.name || fields.appearance || fields.story);
+  const noInfos = !(
+    fields.name ||
+    fields.appearance ||
+    fields.story ||
+    fields.videolink
+  );
+
+  const story = !fields.story
+    ? ""
+    : storyUnfolded
+    ? fields.story
+    : fields.story.substring(0, 20) + "...";
+  const storyUnfoldClass =
+    "text-btn link no-underline fas " +
+    (!storyUnfolded ? "fa-caret-down" : "fa-caret-up");
 
   return (
     <div>
@@ -136,14 +156,34 @@ export default (props) => {
               )}
             </div>
             <div>
-              {fields.story ? (
-                <span>
-                  <i>Story: </i>
-                  <b>{fields.story}</b>
-                </span>
-              ) : (
-                ""
-              )}
+              {!fusedData.affected_id
+                ? ""
+                : noInfos || !fields.story
+                ? ""
+                : (
+                    <span>
+                      <i>Story: </i>
+                      <b>{story}</b>{" "}
+                      <span onClick={onToggleStory}>
+                        <i className={storyUnfoldClass}></i>
+                      </span>
+                    </span>
+                  ) || ""}
+            </div>
+            <div className="center">
+              {!fusedData.affected_id
+                ? ""
+                : noInfos || !fields.videolink
+                ? ""
+                : (
+                    <div>
+                      <div className="mb-25"></div>
+                      <video width="100%" controls loop playsInline>
+                        <source src={fields.videolink} type="video/mp4" />
+                      </video>
+                      <div className="mb-25"></div>
+                    </div>
+                  ) || ""}
             </div>
           </div>
         ) : (
