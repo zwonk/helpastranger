@@ -1,0 +1,11 @@
+node_modules/
+.env*
+!.env.example
+!.env.production.example
+
+old/
+logs/
+docs/
+*.zip
+
+migrations_m*.sql

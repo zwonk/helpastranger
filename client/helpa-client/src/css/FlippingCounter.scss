@@ -1,0 +1,141 @@
+$digitHeight : 90px;
+$speed       : .5s;
+$baseColor   : #55b9f3;
+$textColor   : white;
+$baseColorPurple: #FBC8D4;
+/*
+ 
+//////////////////////////////////////// 
+// DEMO ONLY
+
+@import url('https://fonts.googleapis.com/css?family=Fjalla+One&display=swap');
+
+html,body{ height:100%; }
+
+body{ 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $baseColor;
+  font-family: 'Fjalla One', Arial; 
+  perspective:1000px; 
+} 
+*/
+
+
+@import url('https://fonts.googleapis.com/css?family=Fjalla+One&display=swap');
+
+.numCounterWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fjalla One', Arial; 
+    perspective:1000px; 
+    height: 100%;
+}
+
+#affected-onboard-counter .numCounter  div b {
+  box-shadow:0px 3px 12px rgba(204, 77, 180, 0.6), 0px 3px 1px rgba(248, 161, 231, 0.6);
+  /*box-shadow: -10px -10px 60px rgba(204, 77, 180, 0.24), 10px 10px 60px rgba(248, 161, 231, 0.24);*/
+}
+
+.numCounter{ 
+  display: inline-block; 
+  height: $digitHeight; 
+  line-height: $digitHeight; 
+  text-shadow: 0 0 2px #FFF;
+  font-weight: bold; 
+  white-space: normal;
+  font-size: $digitHeight/1.5;
+  
+  > div{
+    display: inline-block;
+    vertical-align: top;
+    height: 100%; 
+    
+    > b{
+      display: inline-block; 
+      width: $digitHeight/2.0;///1.4; 
+      height: 100%; 
+      margin: 0 .1em;
+      border-radius: 8px;
+      text-align: center;
+      text-shadow: 2px 1px 3px rgba(black, .2);
+      box-shadow: 2px 2px 3px rgba(black, .1) inset, 
+                 -2px -2px 2px rgba(white, .12) inset;
+      overflow: hidden;
+
+      &::before{ 
+          content:' 0 1 2 3 4 5 6 7 8 9 '; 
+          display:block; 
+          word-break:break-all;
+          word-break:break-word; 
+          transition: $speed cubic-bezier(.75, .15,.6, 1.15),
+                      text-shadow 150ms;
+      }
+      
+      &.blur{
+        opacity: .8;
+        text-shadow: 2px 1px 3px rgba(black, .2),
+                     0 .1em 2px rgba($textColor, .6), 
+                     0 .3em 3px rgba($textColor, .3), 
+                     0 -.1em 2px rgba($textColor, .6),
+                     0 -.3em 3px rgba($textColor, .3);
+          
+      }
+
+      @for $i from 1 through 9{
+          &[data-value="#{$i}"]::before{ margin-top:-$digitHeight * $i; }
+      }   
+    }
+    
+    // format number (US-format)
+    &:nth-last-child(3n):not(:first-child){
+      &::before{
+        content:",";
+        display:inline;
+        font-size: 1.1em; 
+        opacity: .6;
+        color: white;
+      }
+    }
+  }
+} 
+
+
+ 
+.jsCounter2 { 
+  overflow:hidden; 
+  padding: .4em; 
+  height: 130px;
+  text-align:center; 
+  
+  border-top: 1px solid rgba(white, .1);
+  border-left: .5px solid rgba(white, .01);
+
+ //  background:linear-gradient(to bottom, #555 1%, #333 4%, #1a1a1a 98%, #000 100%); 
+  border-radius: 16px; 
+  // box-shadow:0 5px 12px #111, 0 0 8px 0 rgba(255,255,255,.1) inset;
+  
+  /*background: linear-gradient(330deg, scale-color($baseColor, $lightness: 16%, $saturation: 10% ), 
+                                      scale-color($baseColor, $lightness: -14%, $saturation:-20% ));
+  
+  box-shadow:  -10px -10px 60px scale-color($baseColor, $lightness: -25%, $saturation:-30% ), 
+               10px 10px 60px scale-color($baseColor, $lightness: 25%, $saturation: 30% );*/
+
+
+  /*background: linear-gradient(to right, #FBC8D4, #B5B3FD);
+  border-radius: 28px;
+  box-shadow:  -10px -10px 60px scale-color( rgba(241, 134, 221, 0.24), $lightness: -25%, $saturation:-30% ), 
+               10px 10px 60px scale-color( rgba(241, 134, 221, 0.24), $lightness: 25%, $saturation: 30% ); */
+  b {
+    background: scale-color($baseColorPurple, $lightness: -10%, $saturation: -10% );
+    
+    background: linear-gradient(-30deg, scale-color($baseColorPurple, $lightness: 8%, $saturation: 5% ), 
+                                        scale-color($baseColorPurple, $lightness: -20%, $saturation:-22% ));
+    
+    color: $textColor;
+  }
+}
+
+

@@ -1,0 +1,2 @@
+web: node index.js --trace-sync-io
+worker: node worker.js
