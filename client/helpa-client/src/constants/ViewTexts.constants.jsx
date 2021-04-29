@@ -1,0 +1,15 @@
+export default {
+  HOME: "",
+  ACCOUNT: "account",
+  SIGNOUT: "signout",
+  ADMIN: "admin",
+  ACCOUNT_DETAILS: "Details",
+  ACCOUNT_LAST_DONATIONS: "Last Donations",
+  ACCOUNT_QR_CODE_PRINTS: "QR codes",
+  ACCOUNT_CASHOUTS: "Cashouts",
+  ACCOUNT_WITHDRAWS: "Withdrawals",
+  ACCOUNT_RECURRENT_PAYMENTS: "Recurrent Payments",
+  ACCOUNT_CAMPAIGNS: "Created Campaigns",
+  ACCOUNT_STATISTICS: "Statistics",
+  ACCOUNT_SETTINGS: "Settings",
+};

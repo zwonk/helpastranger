@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="2480px" height="314px" viewBox="0 0 2480 314" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>HelpAStranger</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="HelpAStranger" fill="#000000" fill-rule="nonzero">
+            <text id="HELP-A-STRANGER" font-family="Helvetica" font-size="210" font-weight="normal">
+                <tspan x="227.263184" y="204">HELP A STRANGER</tspan>
+            </text>
+            <g id="mouse-pointer-solid" transform="translate(2233.000000, 181.000000)">
+                <path d="M81.2132765,85.4955058 L52.7032076,85.4955058 L67.7077857,120.821793 C68.7529543,123.270861 67.5586293,126.016842 65.1697111,127.055904 L51.9566203,132.621899 C49.4935271,133.660961 46.7313152,132.473573 45.6861465,130.098537 L31.4281558,96.5534623 L8.13721078,119.708437 C5.03341767,122.793672 0,120.41526 0,116.368893 L0,4.75338115 C0,0.493227291 5.35376762,-1.58359771 8.13694201,1.41383615 L84.5726506,77.4061488 C87.6557502,80.3100671 85.380782,85.4955058 81.2132765,85.4955058 L81.2132765,85.4955058 Z" id="Path"></path>
+            </g>
+        </g>
+    </g>
+</svg>
