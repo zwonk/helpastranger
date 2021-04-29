@@ -7,8 +7,7 @@
 
 <p align="center">
     <a href="https://david-dm.org/zwonk/helpastranger/" style="text-decoration:none;"><img src="https://david-dm.org/zwonk/helpastranger/heroku-badge.png" alt="Dependencies"></a>
-    <a href="https://snyk.io/test/github/zwonk/helpastranger" style="text-decoration:none;"><img src="https://snyk.io/test/github/zwonk/helpastranger/badge.svg" alt="Known Vulnerabilities"></a>
-     <a href="https://ecosystem.iota.org/tutorials/iota-developer-essentials" style="text-decoration:none;"><img src="https://img.shields.io/badge/iota-ecosystem-yellowgreen.svg)" alt="IOTA Ecosystem"></a>
+     <a href="https://ecosystem.iota.org/" style="text-decoration:none;"><img src="https://img.shields.io/badge/iota-ecosystem-yellowgreen.svg)" alt="IOTA Ecosystem"></a>
 </p>
 
 
