@@ -30,6 +30,7 @@ export default withRouter((props) => {
   const [campaignEnable, setCampaignEnable] = useState(false);
   const [showCampaign, setShowCampaign] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [storyUnfolded, setStoryUnfolded] = useState(false);
 
   const onEditInfos = (value, field) =>
     setFields((fields) => ({ ...fields, [field]: value }));
@@ -40,7 +41,7 @@ export default withRouter((props) => {
   const onSubmit = async (fusedData, fields) => {
     let gps;
 
-    if (!isUrlQrScan && gpsEnable) {
+    if (isUrlQrScan && gpsEnable) {
       if (navigator.geolocation) {
         gps = (async () =>
           new Promise(function (resolve, reject) {
@@ -75,16 +76,15 @@ export default withRouter((props) => {
   const toggleShowCampaign = () =>
     setShowCampaign((showCampaign) => !showCampaign);
 
+  const onToggleStory = () => setStoryUnfolded(!storyUnfolded);
+
   const url = props.location.pathname;
 
   const isUrlQrScan =
-  url.includes("/" + VIEWS.Q) && 
-    ( !fusedData.affectedData.curr_public_key 
-    || 
-    (fusedData.affectedData.curr_public_key
-       && fusedData.qrScanned === fusedData.affectedData.curr_public_key)
-    )
-    
+    url.includes("/" + VIEWS.Q) &&
+    (!fusedData.affectedData.curr_public_key ||
+      (fusedData.affectedData.curr_public_key &&
+        fusedData.qrScanned === fusedData.affectedData.curr_public_key));
 
   const nameInfoChanged = fusedData.affectedData.name !== fields.name;
   const appearanceInfoChanged =
@@ -95,12 +95,24 @@ export default withRouter((props) => {
   const noInfos = !(
     fields.name ||
     fields.appearance ||
-    fields.location_description
+    fields.location_description ||
+    fields.videolink ||
+    fields.story
   );
 
   const canEdit = isUrlQrScan; //TODO
   const customSwitch1 = "customSwitches" + utils.makeHash();
   const customSwitch2 = "customSwitches" + utils.makeHash();
+
+  /* potentially deduplicate with PopupDonationInfo" */
+  const story = !fields.story
+    ? ""
+    : storyUnfolded
+    ? fields.story
+    : fields.story.substring(0, 20) + "...";
+  const storyUnfoldClass =
+    "text-btn link no-underline fas " +
+    (!storyUnfolded ? "fa-caret-down" : "fa-caret-up");
 
   return (
     <div>
@@ -151,6 +163,36 @@ export default withRouter((props) => {
                       <i>Where they at? </i>
                       <b>{fields.location_description}</b>
                     </span>
+                  ) || ""}
+            </div>
+            <div>
+              {!fusedData.affected_id
+                ? ""
+                : noInfos || !fields.story
+                ? ""
+                : (
+                    <span>
+                      <i>Their story </i>
+                      <b>{story}</b>{" "}
+                      <span onClick={onToggleStory}>
+                        <i className={storyUnfoldClass}></i>
+                      </span>
+                    </span>
+                  ) || ""}
+            </div>
+            <div className="center">
+              {!fusedData.affected_id
+                ? ""
+                : noInfos || !fields.videolink
+                ? ""
+                : (
+                    <div>
+                      <div className="mb-25"></div>
+                      <video width="100%" controls loop playsinline>
+                        <source src={fields.videolink} type="video/mp4" />
+                      </video>
+                      <div className="mb-25"></div>
+                    </div>
                   ) || ""}
             </div>
           </div>
@@ -282,7 +324,7 @@ export default withRouter((props) => {
           {!utils.getCachedUsersId() ? "Free donation on us" : "Donate"}
         </div>
         {utils.getCachedUsersId() ? (
-          <small class="center">
+          <small className="center">
             If your remaining account balance would turn below 1MIOTA the
             donation will be rounded up.
           </small>

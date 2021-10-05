@@ -23,6 +23,7 @@ import POPUP from "constants/Popup.constants";
 
 import Functions from "functions/FunctionsMain";
 import CaptchaedFunctions from "functions/CaptchaedFunctions";
+import DoubleCaptchaedFunctions from "functions/DoubleCaptchaedFunctions";
 import utils from "functions/utils/utils";
 import useDebounce from "functions/utils/debounce";
 
@@ -39,6 +40,7 @@ export default withRouter((props) => {
 
   const { executeRecaptcha } = useGoogleReCaptcha();
   const captchaedFunctions = new CaptchaedFunctions(executeRecaptcha);
+  const doubleCaptchaedFunctions = new DoubleCaptchaedFunctions(captchaedFunctions, executeRecaptcha);
 
   const homeViewData = useSelector((state) => state.homeViewData);
   const [viewPortVal, setViewPortVal] = useState({
@@ -77,7 +79,7 @@ export default withRouter((props) => {
   }, [homeViewData.platformInfo]);
 
   const handleScan = (result) => {
-    if (result) captchaedFunctions.handleScan(result);
+    if (result) doubleCaptchaedFunctions.handleScan(result);
   };
 
   const handleMapChange = (e) => {
@@ -90,7 +92,7 @@ export default withRouter((props) => {
   const debouncedViewPort = useDebounce(viewPortVal, 1000);
 
   useEffect(() => {
-    captchaedFunctions.fetchToHomeViewData(
+    doubleCaptchaedFunctions.fetchToHomeViewData(
       debouncedViewPort.center.lat,
       debouncedViewPort.center.lng,
       debouncedViewPort.zoom,
@@ -483,7 +485,7 @@ export default withRouter((props) => {
                 alt="emoji-city-scape-animated"
                 data-attribution="https://www.behance.net/gallery/45319335/City-Nightscape-GIF-Animation"
                 className="emoji-city-scape-animated"
-                src="img/city-scape-animated.gif"
+                src="/img/city-scape-animated.gif"
               />
             </div>
           </h2>
@@ -532,7 +534,7 @@ export default withRouter((props) => {
               <img
                 alt="emoji-globe-animated"
                 className="emoji-globe-animated"
-                src="img/earth-emoji-spinning.gif"
+                src="/img/earth-emoji-spinning.gif"
               />
             </div>
           </h2>
@@ -569,7 +571,7 @@ export default withRouter((props) => {
         <div className="container home-last center">
           <div className="video-container">
             <video
-              src="img/animation_waving.mov"
+              src="/img/animation_waving.mov"
               width="50%"
               autoPlay
               loop

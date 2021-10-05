@@ -260,8 +260,9 @@ module.exports = {
 
       for (let j = 0; j < secrets_arr.length; j++) {
         const res = queryResults[j];
-        if (!res || res.error)
+        if (!res || res.error){
           return { error: res ? res.error : DEFAULT_ERROR };
+        }
       }
 
       return true;

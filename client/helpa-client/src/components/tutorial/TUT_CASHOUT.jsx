@@ -14,9 +14,9 @@ export default (props) => {
             loop
             muted
             playsInline
-            poster="img/spinner.svg"
+            poster="/img/spinner.svg"
           >
-            <source src="img/anim-cashout.mov" type="video/mp4" />
+            <source src="/img/anim-cashout.mov" type="video/mp4" />
           </video>
         </div>
       </div>

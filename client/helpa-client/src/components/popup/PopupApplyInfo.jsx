@@ -31,7 +31,9 @@ export default (props) => {
           get access to new features, and be rewarded with upcoming perks{" "}
           <span role="img" aria-label={"emoji-diamond"}>
             {utils.EMOJI_LABELS["emoji-diamond"]}
-          </span>.
+          </span>
+          . By applying you grant us access to your personal details and we will
+          personally contact you after a successful application.
           <br />
           {fusedData.hasAppliedForMember ? (
             <small>
@@ -60,12 +62,12 @@ export default (props) => {
             loop
             muted
             playsInline
-            poster="img/spinner.svg"
+            poster="/img/spinner.svg"
             alt="person delivering cash"
           >
-            <source src="img/anim-cashout.mov" type="video/mp4" />
+            <source src="/img/anim-cashout.mov" type="video/mp4" />
           </video>
-      </div>
+        </div>
 
         <div className="col-12 center mb-25 container">
           <div className="popup-btn-wrapper-narrow">

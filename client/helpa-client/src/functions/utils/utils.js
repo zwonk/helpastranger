@@ -11,8 +11,8 @@ function utils() {}
 utils.MI = 1000000;
 utils.KI = 1000;
 utils.IOTA_EXPLORER = parseInt(process.env.REACT_APP_CHRYSALIS)
-  ? (!process.env.REACT_APP_DEV || process.env.REACT_APP_DEV === "true" ? "https://explorer.iota.org/testnet/transaction/" : "https://explorer.iota.org/mainnet/transaction/")
-  : "https://explorer.iota.org/devnet/transaction/"; //"https://comnet.thetangle.org/transaction/";
+  ? (!process.env.REACT_APP_DEV || process.env.REACT_APP_DEV === "true" ? "https://explorer.iota.org/comnet/transaction/" : "https://explorer.iota.org/mainnet/transaction/")
+  : "https://explorer.iota.org/legacy-devnet/transaction/"; //"https://comnet.thetangle.org/transaction/";
 utils.ZOOM_START = 17;
 utils.ZOOM_START_MAIN = 11;
 utils.TEN_SEC = 10000;
@@ -26,7 +26,7 @@ utils.DEFAULT_ERROR = "An unkown error occured.";
 utils.ROLLOUT_CAMPAIGNS = false;
 utils.ROLLOUT_RECURRENTS = false;
 utils.DOMAIN_URL = "https://"+process.env.REACT_APP_DOMAIN;
-utils.MAIL = "info@"+process.env.REACT_APP_DOMAIN;
+utils.MAIL = "info@" + process.env.REACT_APP_DOMAIN;
 utils.QR_SITE = "q";
 utils.HASH_LENGTH = 64;
 utils.LIMIT = 25;
@@ -46,7 +46,6 @@ utils.ADMIN_ACTIONS = {
 utils.CAPTCHA_EXEMPT = [
   "donations_get",
   "a_donations_get",
-  "locations_get_all_for_city_usermatched",
   "locations_get_all_for_city",
   "qr_codes_get_platform_count",
   "a_users_get_balance",

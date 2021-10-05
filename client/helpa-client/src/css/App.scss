@@ -40,6 +40,7 @@
 
 body {
   font-family: 'Nunito', sans-serif;
+  overflow-wrap: break-word;
 }
 
 body.non-scrolling {
@@ -188,6 +189,11 @@ i.close-icon:hover {
 .underline {
   text-decoration: underline !important;
 }
+
+.no-underline {
+  text-decoration: none !important;
+}
+
 
 .link:hover {
   cursor: pointer;

@@ -36,7 +36,7 @@ export default (props) => {
         <img
           className="img-iota-distributed"
           alt="iota-distributed"
-          src="img/iota-distributed.png"
+          src="/img/iota-distributed.png"
           width="80%"
         />
       </div>

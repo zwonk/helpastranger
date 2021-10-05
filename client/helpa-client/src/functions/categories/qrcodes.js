@@ -156,7 +156,7 @@ export default {
     return true;
   },
 
-  qr_create: async function (amount, qr_low_res=false, captcha = null) {
+  qr_create: async function (amount, qr_low_res=false, captcha = null, captcha2 = null) {
     dispatch(updateData({ qr_blob_merged: {} }));
     dispatch(popupPending(true));
     dispatch(popup(POPUP.QR_CREATE_FINISHED));
@@ -179,10 +179,10 @@ export default {
     if (utils.getCachedUsersId()) {
       res2 = await api("a_qr_codes_create", {
         body: { affected_ids, qr_low_res },
-        captcha,
+        captcha: captcha2,
       });
     } else {
-      res2 = await api("qr_codes_create", { body: { affected_ids, qr_low_res }, captcha });
+      res2 = await api("qr_codes_create", { body: { affected_ids, qr_low_res }, captcha: captcha2 });
     }
 
     if (this.error(res2)) return false;

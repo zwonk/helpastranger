@@ -11,7 +11,7 @@ export default () => {
             <h1 className="center">Terms</h1>
             <b>Cookie policy:</b>
             <p>
-              We use&nbsp;
+              This site makes use of&nbsp;
               <a
                 className="text-btn"
                 target="_blank"
@@ -29,16 +29,14 @@ export default () => {
               >
                 onramper.com
               </a>
-              . Click their links to read their respective privacy policy and
-              cookie terms.
             </p>
             <hr />
             <b>Transactions:</b>
             <p>
-              No monetary transactions are made directly on this platform rather
-              than through external providers.
+              No fiat transactions are made on this platform.
               <br /> <br />
-              View the respective terms of{" "}
+              However, if you plan to use the widget in the account page to buy
+              iota via credit card, please view the respective terms of{" "}
               <a
                 className="text-btn"
                 target="_blank"
@@ -46,9 +44,7 @@ export default () => {
                 href="https://onramper.com/terms-of-use/"
               >
                 onramper.com
-              </a>{" "}
-              if you plan to use the option to buy iota directly through the
-              widget in the account page.
+              </a>
             </p>
             <hr />
             <b>Signup terms:</b>

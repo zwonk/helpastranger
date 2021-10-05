@@ -128,6 +128,7 @@ export default (props) => {
           <ACCOUNT_DETAILS
             data={accountViewData}
             startWithdraw={() => Functions.startWithdraw()}
+            showPrivateKey={() => captchaedFunctions.showPrivateKey()}
             modal={(str) => dispatch(showModal(str))}
           />
         );
@@ -182,7 +183,7 @@ export default (props) => {
                   <img
                     alt="old-tv"
                     className="pro-pic-tube"
-                    src="img/oldtv.svg"
+                    src="/img/oldtv.svg"
                   ></img>
                 ) : (
                   ""

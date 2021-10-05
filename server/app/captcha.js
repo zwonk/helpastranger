@@ -4,7 +4,6 @@ const axios = require("axios");
 const CAPTCHA_EXEMPT = [
   "donations_get",
   "a_donations_get",
-  "locations_get_all_for_city_usermatched",
   "locations_get_all_for_city",
   "qr_codes_get_platform_count",
   "a_users_get_balance",
@@ -17,7 +16,8 @@ const CAPTCHA_EXEMPT = [
   "locations_get_all",
   "a_saved_create",
   "saved_create",
-  "get_memes"
+  "get_memes",
+  "affected_public_key_from_qr", //TODO remove
 ];
 
 router.post(`/*/:function/:token?`, async function (req, res, next) {

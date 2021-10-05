@@ -133,14 +133,36 @@ export default (props) => {
         </div>
       </div>
 
+      <div className="col-12 mb-55 center container">
+        <div
+          className="wow animate__animated animate__fadeInUp"
+          data-wow-duration="0.9s"
+        >
+          <b>Private key</b>
+          <p className="left">
+            This is the private key that lets you access your funds even without
+            this platform.
+            <br />
+            <small>
+              Note: Never show your private key to anyone nor copy it to your
+              computer. It's best to write it on a piece of paper. Follow online
+              guidelines how to transfer funds using this key.
+            </small>
+          </p>
+          <div
+            className="border-box link-box blue"
+            onClick={() => props.showPrivateKey()}
+          >
+            Show private key
+          </div>
+        </div>
+      </div>
+
       <div className="container mb-55 center small">
-      <p>
+        <p>
           Questions?
           <br />
-          <a
-            className="text-btn"
-            href="/faq"
-          >
+          <a className="text-btn" href="/faq">
             FAQ
           </a>
         </p>

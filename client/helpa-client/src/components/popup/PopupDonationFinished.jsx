@@ -65,12 +65,12 @@ export default (props) => {
           <div className="video-container">
             <video
               width="80%"
-              src="img/anim-transaction.mov"
+              src="/img/anim-transaction.mov"
               autoPlay
               loop
               muted
               playsInline
-              poster="img/spinner.svg"
+              poster="/img/spinner.svg"
               alt="donation-processing"
             />
           </div>
@@ -78,12 +78,12 @@ export default (props) => {
             <h3 className="">
               {offline
                 ? "Waiting for connection. Please keep this open"
-                : "Transaction is processing"}
+                : "Transaction is processing."}
             </h3>
           </div>
           <div>
             <div>
-              <p className="">Taking too long?</p>
+              <p className="">Takes a couple of seconds...</p>
             </div>
             <div
               className="button border-btn"
@@ -99,12 +99,12 @@ export default (props) => {
       <div className={fusedData.pending ? "hide" : "video-container"}>
         <video
           width="80%"
-          src="img/anim-donated.mov"
+          src="/img/anim-donated.mov"
           autoPlay
           loop
           muted
           playsInline
-          poster="img/anim-donated.jpg"
+          poster="/img/anim-donated.jpg"
           alt="donation-finished"
         />
       </div>

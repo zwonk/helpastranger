@@ -3,11 +3,14 @@ import React from "react";
 import VIEWS from "constants/Views.constants";
 import { withRouter } from "react-router-dom";
 
-const LONG_HEADER_PAGE = [VIEWS.HOME, VIEWS.ACCOUNT, VIEWS.SIGNIN, VIEWS.SIGNOUT];
+const LONG_HEADER_PAGE = [VIEWS.HOME, VIEWS.Q, VIEWS.ACCOUNT, VIEWS.SIGNIN, VIEWS.SIGNOUT];
 
 export default withRouter((props) => {
 
-  const url = props.location.pathname.replace("/", "");
+  let url = props.location.pathname.split("/");
+  if(url.length > 1){
+    url = url[1];
+  }
   
   return (
     <div id="Nav">

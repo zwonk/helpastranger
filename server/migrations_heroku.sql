@@ -309,6 +309,7 @@ create table edits (
     name text,
     appearance text,
     story text,
+    videolink
     `created_at` timestamp default current_timestamp,
     `updated_at` timestamp default current_timestamp on update current_timestamp,
     primary key (`id`),

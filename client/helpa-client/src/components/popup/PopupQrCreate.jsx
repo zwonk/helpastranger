@@ -82,9 +82,9 @@ export default (props) => {
             muted
             playsInline
             alt="printing qr plate"
-            poster="img/anim-qrprint.jpg"
+            poster="/img/anim-qrprint.jpg"
           >
-            <source src="img/anim-qrprint.mov" type="video/mp4" />
+            <source src="/img/anim-qrprint.mov" type="video/mp4" />
           </video>
         </div>
       </div>

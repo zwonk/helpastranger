@@ -35,7 +35,7 @@ export default {
       dispatch(addHomeViewData({ platformInfo }));
   },
 
-  fetchToHomeViewData: async function (x, y, zoomLevel, map, captcha = null) {
+  fetchToHomeViewData: async function (x, y, zoomLevel, map, captcha = null, captcha2 = null) {
     let distance = (60000 / (2 ^ zoomLevel)) * 2;
 
     if (map) {
@@ -82,7 +82,7 @@ export default {
         y,
         distance,
       },
-      captcha,
+      captcha: captcha2,
     });
 
     if (affected_locations && !affected_locations.error) {
@@ -131,7 +131,7 @@ export default {
     dispatch(popup(POPUP.HOME_MAP_AFFECTED_INFO));
   },
 
-  handleScan: async function (result, fullUrl, captcha = null) {
+  handleScan: async function (result, fullUrl, captcha = null, captcha2 = null) {
     /* 1. qr code recognized */
 
     if (!utils.checkQrCodeUrl(result, fullUrl)) {
@@ -157,7 +157,7 @@ export default {
     //TODO let datafusion do this fetching
     res2 = await api("affected_get_data_package", {
       body: { affected_ids: res.affected_id },
-      captcha,
+      captcha: captcha2,
     });
     res2 = res2[0];
 

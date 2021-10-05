@@ -20,6 +20,7 @@
     "test": "NODE_ENV=test mocha",
     "lint": "eslint --ignore-path .gitignore .",
     "start": "nf start",
+    "testcrypto": "NODE_ENV=dev node test/cryptotest.js",
     "docu": "./node_modules/.bin/documentation build app/api/*.js -f html -o docs --shallow"
   },
   "dependencies": {
