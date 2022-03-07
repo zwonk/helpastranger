@@ -127,8 +127,8 @@ Please update the documention when needed by editing [`JSDoc`](http://usejsdoc.o
 If you want to get involved in the community, need help with getting setup, have any issues related with the library contact this [mail](info@helpastranger.net).
 
 ## License
-For non-profit use, commercial or non-commercial this software is licensed under [MIT license](https://opensource.org/licenses/MIT)<Help A Stranger Collective, 2022>.
-For for-profit use, the commercial rights of this software belong to the owner of this [`NFT`](http://opensea.org).
+For non-profit use, commercial or non-commercial, this software is licensed under [MIT license](https://opensource.org/licenses/MIT)<Help A Stranger Collective, 2022>.
+For for-profit use, the commercial rights of this software belong to the owner of this [`NFT`](https://opensea.io/assets/0xf0c13b555ab60f3d9c8a27e9ee696ad96201ecb0/1).
 
 
 The owner of the NFT can be contacted via mail if he publishes his mail and proves the holding of the NFTs.
@@ -138,4 +138,4 @@ As a fallback the `requestAccess` method on the smart contract can be invoked to
 Invoking the `requestAccess(string calldata message) ` method requires the sending of 60000 gas as compensation for the cost of the NFT owner to invoke the `respondToAccessRequest(string calldata message)` method. 
 
 ## NFT of source code
-The NFT of this source code belongs to the owner of this NFT [`NFT`](http://opensea.org) and included the commercial rights for the for-profit use of the software.
+The NFT of this source code belongs to the owner of this NFT [`NFT`](https://opensea.io/assets/0xf0c13b555ab60f3d9c8a27e9ee696ad96201ecb0/1) and includes the commercial rights for the for-profit use of the software.
